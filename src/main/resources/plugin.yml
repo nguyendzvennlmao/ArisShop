@@ -1,0 +1,8 @@
+name: ArisShop
+version: 1.0.0
+main: me.arismc.shop.ArisShop
+api-version: '1.20'
+folia-supported: true
+commands:
+  shop:
+    description: Open Shop
