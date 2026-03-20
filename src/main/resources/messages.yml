@@ -1,0 +1,17 @@
+# Cấu hình tin nhắn ArisShop - ArisMC Network
+prefix: "&#ff0812&lARIS SHOP &8» "
+
+# Tin nhắn khi giao dịch thành công
+purchase-success: "&aBạn đã mua thành công &#facc15%item% &avới giá &#facc15%price%!"
+purchase-success-actionbar: "&a✔ Mua hàng thành công!"
+
+# Tin nhắn lỗi (Để trống "" nếu chỉ muốn phát âm thanh click/error)
+# Hệ thống sẽ tự động phát âm thanh ENTITY_VILLAGER_NO khi gặp các lỗi này
+not-enough-money: "&#ff0812&l⚠ &fBạn không có đủ tiền để thực hiện giao dịch này."
+not-enough-shard: "&#ff0812&l⚠ &fBạn không có đủ Shards. Hãy nạp thêm tại &#facc15/nap."
+inventory-full: "&#ff0812&l⚠ &fHành trang của bạn đã đầy, không thể nhận thêm vật phẩm."
+
+# Tin nhắn hệ thống khác
+reload-config: "&aĐã tải lại toàn bộ cấu hình ArisShop thành công!"
+no-permission: "&#ff0812&l⚠ &fBạn không có quyền hạn để thực hiện lệnh này."
+only-players: "&cChỉ người chơi mới có thể sử dụng cửa hàng này!"
