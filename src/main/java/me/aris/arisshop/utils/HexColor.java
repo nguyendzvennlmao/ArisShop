@@ -5,16 +5,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HexColor {
-    private static final Pattern PATTERN = Pattern.compile("#[a-fA-F0-0]{6}");
+    private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
 
     public static String format(String message) {
         if (message == null) return "";
-        Matcher matcher = PATTERN.matcher(message);
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        StringBuilder builder = new StringBuilder();
         while (matcher.find()) {
-            String color = message.substring(matcher.start(), matcher.end());
-            message = message.replace(color, ChatColor.of(color) + "");
-            matcher = PATTERN.matcher(message);
+            matcher.appendReplacement(builder, ChatColor.of("#" + matcher.group(1)).toString());
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+        matcher.appendTail(builder);
+        return ChatColor.translateAlternateColorCodes('&', builder.toString());
     }
-               }
+}
