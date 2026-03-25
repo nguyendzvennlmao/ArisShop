@@ -23,8 +23,8 @@ public class ShopListener implements Listener {
         String title = event.getView().getTitle();
 
         String clickSnd = mainConfig.getString("sounds.click-sound", "ui.button.click");
-
         Material backMat = Material.valueOf(mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE").toUpperCase());
+
         if (event.getCurrentItem().getType() == backMat) {
             event.setCancelled(true);
             player.playSound(player.getLocation(), clickSnd, 1f, 1f);
@@ -36,8 +36,9 @@ public class ShopListener implements Listener {
         FileConfiguration mainGuiConfig = YamlConfiguration.loadConfiguration(mainGuiFile);
         String mainTitle = HexColor.format(mainGuiConfig.getString("main-menu.title", ""));
 
-        if (title.equals(mainTitle)) {
-            event.setCancelled(true);
+        event.setCancelled(true);
+
+        if (title.equalsIgnoreCase(mainTitle)) {
             if (mainGuiConfig.contains("main-menu.categories")) {
                 for (String key : mainGuiConfig.getConfigurationSection("main-menu.categories").getKeys(false)) {
                     if (event.getSlot() == mainGuiConfig.getInt("main-menu.categories." + key + ".slot")) {
@@ -48,12 +49,11 @@ public class ShopListener implements Listener {
                     }
                 }
             }
-        } else if (title.contains("Confirm") || title.contains("Buy")) {
-            event.setCancelled(true);
+        } else if (title.toLowerCase().contains("confirm") || title.toLowerCase().contains("buy")) {
+
         } else {
-            event.setCancelled(true);
             player.playSound(player.getLocation(), clickSnd, 1f, 1f);
             new CategoryInventory().openBuyMenu(player);
         }
     }
-                     }
+}
