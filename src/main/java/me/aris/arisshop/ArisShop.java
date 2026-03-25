@@ -2,9 +2,9 @@ package me.aris.arisshop;
 
 import me.aris.arisshop.commands.ShopCommand;
 import me.aris.arisshop.listeners.ShopListener;
+import me.aris.arisshop.utils.EconomyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.File;
 
 public class ArisShop extends JavaPlugin {
     private static ArisShop instance;
@@ -13,13 +13,11 @@ public class ArisShop extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        
-        String[] resources = {"gui/maingui.yml", "gui/buy.yml", "shops/food.yml", "shops/gear.yml", "shops/end.yml", "shops/nether.yml"};
-        for (String res : resources) {
-            File f = new File(getDataFolder(), res);
-            if (!f.exists()) saveResource(res, false);
+        if (!EconomyManager.setupEconomy()) {
+            getLogger().severe("Vault not found!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
         }
-
         getCommand("arisshop").setExecutor(new ShopCommand());
         Bukkit.getPluginManager().registerEvents(new ShopListener(), this);
     }
