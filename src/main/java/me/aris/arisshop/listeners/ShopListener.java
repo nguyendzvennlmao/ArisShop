@@ -2,7 +2,6 @@ package me.aris.arisshop.listeners;
 
 import me.aris.arisshop.ArisShop;
 import me.aris.arisshop.models.CategoryInventory;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -32,12 +31,9 @@ public class ShopListener implements Listener {
                     }
                 }
             }
-        } else {
-            File shopsDir = new File(ArisShop.getInstance().getDataFolder(), "shops");
-            if (shopsDir.exists() && shopsDir.isDirectory()) {
-                event.setCancelled(true);
-                new CategoryInventory().openBuyMenu(player);
-            }
+        } else if (!title.contains("Confirm")) {
+            event.setCancelled(true);
+            new CategoryInventory().openBuyMenu(player);
         }
     }
                 }
