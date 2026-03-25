@@ -34,33 +34,23 @@ public class CategoryInventory {
         FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         
         int rows = config.getInt(header + ".rows", 3);
-        String title = config.getString(header + ".title", "Shop");
-        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(title));
+        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(config.getString(header + ".title", "Shop")));
 
-        if (!isMain) {
-            String bMat = mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE");
-            int bSlot = mainConfig.getInt("back-button.slot", 22);
-            ItemStack back = new ItemStack(Material.valueOf(bMat.toUpperCase()));
+        if (!isMain && !path.contains("buy.yml")) {
+            ItemStack back = new ItemStack(Material.valueOf(mainConfig.getString("back-button.material").toUpperCase()));
             ItemMeta bMeta = back.getItemMeta();
             bMeta.setDisplayName(HexColor.format(mainConfig.getString("back-button.displayname")));
-            List<String> bLore = new ArrayList<>();
-            for (String s : mainConfig.getStringList("back-button.lore")) bLore.add(HexColor.format(s));
-            bMeta.setLore(bLore);
             back.setItemMeta(bMeta);
-            if (bSlot < inv.getSize()) inv.setItem(bSlot, back);
+            inv.setItem(mainConfig.getInt("back-button.slot"), back);
         }
 
         if (config.contains(section)) {
             for (String key : config.getConfigurationSection(section).getKeys(false)) {
                 try {
                     String p = section + "." + key;
-                    Material mat = Material.valueOf(config.getString(p + ".material").toUpperCase());
-                    int amount = config.getInt(p + ".amount", 1);
-                    ItemStack item = new ItemStack(mat, amount);
+                    ItemStack item = new ItemStack(Material.valueOf(config.getString(p + ".material").toUpperCase()), config.getInt(p + ".amount", 1));
                     ItemMeta meta = item.getItemMeta();
-                    
-                    String name = config.getString(p + ".displayname", config.getString(p + ".display_name", "Item"));
-                    meta.setDisplayName(HexColor.format(name));
+                    meta.setDisplayName(HexColor.format(config.getString(p + ".displayname")));
                     
                     String price = config.getString(p + ".price", "0");
                     List<String> lore = new ArrayList<>();
@@ -77,4 +67,4 @@ public class CategoryInventory {
         String openSound = mainConfig.getString("sounds.open-sound", "");
         if (!openSound.isEmpty()) player.playSound(player.getLocation(), openSound, 1f, 1f);
     }
-        }
+                }
