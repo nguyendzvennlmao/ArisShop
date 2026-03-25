@@ -16,26 +16,26 @@ import java.util.List;
 
 public class CategoryInventory {
     public void openCategoryMenu(Player player) {
-        openFromFile(player, "gui/maingui.yml", "main-menu.categories", true);
+        openFromFile(player, "gui/maingui.yml", "main-menu.categories", "main-menu", true);
     }
 
     public void openSubShop(Player player, String shopName) {
-        openFromFile(player, "shops/" + shopName + ".yml", "items", false);
+        openFromFile(player, "shops/" + shopName + ".yml", "items", "shop-item-menu", false);
     }
 
     public void openBuyMenu(Player player) {
-        openFromFile(player, "gui/buy.yml", "items", false);
+        openFromFile(player, "gui/buy.yml", "items", "main-menu", false);
     }
 
-    private void openFromFile(Player player, String path, String section, boolean isMain) {
+    private void openFromFile(Player player, String path, String section, String header, boolean isMain) {
         File file = new File(ArisShop.getInstance().getDataFolder(), path);
         if (!file.exists()) return;
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         
-        int rows = isMain ? config.getInt("main-menu.rows", 3) : config.getInt("rows", 3);
-        String titleKey = isMain ? "main-menu.title" : "title";
-        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(config.getString(titleKey, "Shop")));
+        int rows = config.getInt(header + ".rows", 3);
+        String title = config.getString(header + ".title", "Shop");
+        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(title));
 
         if (!isMain) {
             String bMat = mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE");
@@ -71,4 +71,4 @@ public class CategoryInventory {
         String openSound = mainConfig.getString("sounds.open-sound", "");
         if (!openSound.isEmpty()) player.playSound(player.getLocation(), openSound, 1f, 1f);
     }
-                }
+            }
