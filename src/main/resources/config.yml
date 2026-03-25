@@ -51,14 +51,14 @@ gui-titles:
 
 #Here you can change the back button in the GUI
 back-button:
+  slot: 22
   displayname: '&#FF0000ʙᴀᴄᴋ'
   material: RED_STAINED_GLASS_PANE
   lore:
     - '&fClick to return'
 
-#This Plugin supports custom sounds, you can change them here
 sounds:
   click-sound: "ui.button.click"
   decline-sound: "entity.villager.no"
   buy-sound: "entity.experience_orb.pickup"
-  open-sound: ""
+  open-sound: "block.chest.open"
