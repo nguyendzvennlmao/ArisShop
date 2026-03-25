@@ -22,8 +22,8 @@ public class ShopListener implements Listener {
         FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         String title = event.getView().getTitle();
         String clickSnd = mainConfig.getString("sounds.click-sound", "ui.button.click");
-        Material backMat = Material.valueOf(mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE").toUpperCase());
         
+        Material backMat = Material.valueOf(mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE").toUpperCase());
         event.setCancelled(true);
 
         if (event.getCurrentItem().getType() == backMat) {
@@ -36,12 +36,16 @@ public class ShopListener implements Listener {
         FileConfiguration mainGuiConfig = YamlConfiguration.loadConfiguration(mainGuiFile);
         String mainTitle = HexColor.format(mainGuiConfig.getString("main-menu.title", ""));
 
-        if (title.equalsIgnoreCase(mainTitle)) {
-            for (String key : mainGuiConfig.getConfigurationSection("main-menu.categories").getKeys(false)) {
-                if (event.getSlot() == mainGuiConfig.getInt("main-menu.categories." + key + ".slot")) {
-                    player.playSound(player.getLocation(), clickSnd, 1f, 1f);
-                    new CategoryInventory().openSubShop(player, mainGuiConfig.getString("main-menu.categories." + key + ".action"));
-                    return;
+        if (title.equals(mainTitle)) {
+            if (mainGuiConfig.contains("main-menu.categories")) {
+                for (String key : mainGuiConfig.getConfigurationSection("main-menu.categories").getKeys(false)) {
+                    int slot = mainGuiConfig.getInt("main-menu.categories." + key + ".slot");
+                    if (event.getSlot() == slot) {
+                        player.playSound(player.getLocation(), clickSnd, 1f, 1f);
+                        String action = mainGuiConfig.getString("main-menu.categories." + key + ".action");
+                        new CategoryInventory().openSubShop(player, action);
+                        return;
+                    }
                 }
             }
         } else if (title.toLowerCase().contains("confirm") || title.toLowerCase().contains("buy")) {
@@ -51,4 +55,4 @@ public class ShopListener implements Listener {
             new CategoryInventory().openBuyMenu(player);
         }
     }
-            }
+    }
