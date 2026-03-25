@@ -14,31 +14,30 @@ import java.io.File;
 public class ShopListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (event.getView().getTitle().isEmpty()) return;
+        if (event.getView().getTitle().isEmpty() || event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
         String title = event.getView().getTitle();
 
-        if (title.contains("Shop") || title.contains("Categories")) {
+        if (title.contains("ѕʜᴏᴘ")) {
             event.setCancelled(true);
-            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
-
             File file = new File(ArisShop.getInstance().getDataFolder(), "gui/maingui.yml");
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-
-            if (config.contains("items")) {
-                for (String key : config.getConfigurationSection("items").getKeys(false)) {
-                    if (event.getSlot() == config.getInt("items." + key + ".slot")) {
-                        String shopFile = config.getString("items." + key + ".open_shop");
-                        if (shopFile != null) {
-                            new CategoryInventory().openSubShop(player, shopFile);
-                        }
+            
+            if (config.contains("main-menu.categories")) {
+                for (String key : config.getConfigurationSection("main-menu.categories").getKeys(false)) {
+                    if (event.getSlot() == config.getInt("main-menu.categories." + key + ".slot")) {
+                        String action = config.getString("main-menu.categories." + key + ".action");
+                        if (action != null) new CategoryInventory().openSubShop(player, action);
+                        return;
                     }
                 }
             }
-        } else if (title.contains("Buying") || title.contains("Store")) {
-            event.setCancelled(true);
-            if (event.getCurrentItem() == null) return;
-            new CategoryInventory().openBuyMenu(player);
+        } else {
+            File shopsDir = new File(ArisShop.getInstance().getDataFolder(), "shops");
+            if (shopsDir.exists() && shopsDir.isDirectory()) {
+                event.setCancelled(true);
+                new CategoryInventory().openBuyMenu(player);
+            }
         }
     }
-          }
+                }
