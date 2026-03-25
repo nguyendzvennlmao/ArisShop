@@ -2,6 +2,7 @@ package me.aris.arisshop.listeners;
 
 import me.aris.arisshop.ArisShop;
 import me.aris.arisshop.models.CategoryInventory;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -14,8 +15,22 @@ public class ShopListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (event.getView().getTitle().isEmpty() || event.getCurrentItem() == null) return;
+        if (event.getClickedInventory() != event.getView().getTopInventory()) return;
+
         Player player = (Player) event.getWhoClicked();
+        FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         String title = event.getView().getTitle();
+
+        String clickSnd = mainConfig.getString("sounds.click-sound", "ui.button.click");
+        String noSnd = mainConfig.getString("sounds.decline-sound", "entity.villager.no");
+
+        Material backMat = Material.valueOf(mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE").toUpperCase());
+        if (event.getCurrentItem().getType() == backMat) {
+            event.setCancelled(true);
+            player.playSound(player.getLocation(), clickSnd, 1f, 1f);
+            new CategoryInventory().openCategoryMenu(player);
+            return;
+        }
 
         if (title.contains("ѕʜᴏᴘ")) {
             event.setCancelled(true);
@@ -25,15 +40,23 @@ public class ShopListener implements Listener {
             if (config.contains("main-menu.categories")) {
                 for (String key : config.getConfigurationSection("main-menu.categories").getKeys(false)) {
                     if (event.getSlot() == config.getInt("main-menu.categories." + key + ".slot")) {
+                        player.playSound(player.getLocation(), clickSnd, 1f, 1f);
                         String action = config.getString("main-menu.categories." + key + ".action");
                         if (action != null) new CategoryInventory().openSubShop(player, action);
                         return;
                     }
                 }
             }
-        } else if (!title.contains("Confirm")) {
+        } else if (title.contains("Confirm") || title.contains("Buy")) {
             event.setCancelled(true);
+            if (player.getInventory().firstEmpty() == -1) {
+                player.playSound(player.getLocation(), noSnd, 1f, 1f);
+                return;
+            }
+        } else {
+            event.setCancelled(true);
+            player.playSound(player.getLocation(), clickSnd, 1f, 1f);
             new CategoryInventory().openBuyMenu(player);
         }
     }
-                }
+    }
