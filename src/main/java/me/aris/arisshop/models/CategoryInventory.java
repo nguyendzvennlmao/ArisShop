@@ -55,12 +55,18 @@ public class CategoryInventory {
                 try {
                     String p = section + "." + key;
                     Material mat = Material.valueOf(config.getString(p + ".material").toUpperCase());
-                    ItemStack item = new ItemStack(mat);
+                    int amount = config.getInt(p + ".amount", 1);
+                    ItemStack item = new ItemStack(mat, amount);
                     ItemMeta meta = item.getItemMeta();
-                    String name = config.contains(p + ".displayname") ? config.getString(p + ".displayname") : config.getString(p + ".display_name");
+                    
+                    String name = config.getString(p + ".displayname", config.getString(p + ".display_name", "Item"));
                     meta.setDisplayName(HexColor.format(name));
+                    
+                    String price = config.getString(p + ".price", "0");
                     List<String> lore = new ArrayList<>();
-                    for (String s : config.getStringList(p + ".lore")) lore.add(HexColor.format(s));
+                    for (String s : config.getStringList(p + ".lore")) {
+                        lore.add(HexColor.format(s.replace("%price%", price)));
+                    }
                     meta.setLore(lore);
                     item.setItemMeta(meta);
                     inv.setItem(config.getInt(p + ".slot"), item);
@@ -71,4 +77,4 @@ public class CategoryInventory {
         String openSound = mainConfig.getString("sounds.open-sound", "");
         if (!openSound.isEmpty()) player.playSound(player.getLocation(), openSound, 1f, 1f);
     }
-                                                    }
+        }
