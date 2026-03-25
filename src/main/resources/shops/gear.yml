@@ -1,3 +1,7 @@
+shop-item-menu:
+  title: '&8ѕʜᴏᴘ - ɢᴇᴀʀ'
+  rows: 3
+
 items:
   obsidian:
     material: OBSIDIAN
