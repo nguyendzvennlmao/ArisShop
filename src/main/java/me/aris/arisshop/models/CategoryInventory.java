@@ -34,12 +34,16 @@ public class CategoryInventory {
         FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         
         int rows = config.getInt(header + ".rows", 3);
-        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(config.getString(header + ".title", "Shop")));
+        String title = config.getString(header + ".title", "Shop");
+        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(title));
 
         if (!isMain && !path.contains("buy.yml")) {
             ItemStack back = new ItemStack(Material.valueOf(mainConfig.getString("back-button.material").toUpperCase()));
             ItemMeta bMeta = back.getItemMeta();
             bMeta.setDisplayName(HexColor.format(mainConfig.getString("back-button.displayname")));
+            List<String> bLore = new ArrayList<>();
+            for (String s : mainConfig.getStringList("back-button.lore")) bLore.add(HexColor.format(s));
+            bMeta.setLore(bLore);
             back.setItemMeta(bMeta);
             inv.setItem(mainConfig.getInt("back-button.slot"), back);
         }
@@ -64,7 +68,5 @@ public class CategoryInventory {
             }
         }
         player.openInventory(inv);
-        String openSound = mainConfig.getString("sounds.open-sound", "");
-        if (!openSound.isEmpty()) player.playSound(player.getLocation(), openSound, 1f, 1f);
     }
-                }
+    }
