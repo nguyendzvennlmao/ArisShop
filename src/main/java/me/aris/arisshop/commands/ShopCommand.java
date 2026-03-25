@@ -1,6 +1,5 @@
 package me.aris.arisshop.commands;
 
-import me.aris.arisshop.ArisShop;
 import me.aris.arisshop.models.CategoryInventory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,10 +10,7 @@ public class ShopCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) return true;
-        Player player = (Player) sender;
-        
-        CategoryInventory gui = new CategoryInventory();
-        gui.openCategoryMenu(player);
+        new CategoryInventory().openCategoryMenu((Player) sender);
         return true;
     }
-    }
+}
