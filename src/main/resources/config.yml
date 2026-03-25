@@ -1,0 +1,64 @@
+####################################################################
+####################################################################
+####################################################################
+#██    ██ ██    ██ ██      ██ ███    ███  █████  ██ ████████ ███████
+#██    ██ ██    ██ ██      ██ ████  ████ ██   ██ ██    ██    ██
+#██    ██ ██    ██ ██      ██ ██ ████ ██ ███████ ██    ██    █████
+#██  ██   ██  ██  ██      ██ ██  ██  ██ ██   ██ ██    ██    ██
+#████     ████   ███████ ██ ██      ██ ██   ██ ██    ██    ███████
+####################################################################
+####################################################################
+####################################################################
+
+#This Plugin is from EliVB
+
+#This is a Plugin like DonutSMP Shop, you can change all of the messages.
+#For more Premium Skripts or Plugins join our Discord: "https://discord.gg/V3fcWZrccj"
+
+#permissions
+#shop.reload
+
+#Plugin Placeholders
+#%shop_total_items% - Total items in the shop
+#%shop_total_buyed% - Total money spend in the shop
+#%shop_formatted_total% - Formatted total money spend in the shop
+#%shop_buyed_money_1% - Total money spend by the player
+#%shop_buyed_items_1% - Total items buyed by the player
+#%shop_potion_me_money% - Rank of the player by money spend
+#%shop_potion_me_items% - Rank of the player by items buyed
+
+
+#You can change here the price lore and the lore line of the price in the item lore
+price-lore: "&a%price%"
+lore-line: 1
+
+economy:
+  provider: VAULT
+  currency-format: "#,##0.##"
+  abbreviations:
+    enabled: true #Accept 100k, 10k, 1m, etc... in the sign of price.
+    formats:
+      - 'K'
+      - 'M'
+      - 'B'
+      - 'T'
+
+gui-titles:
+  end: '&8ѕʜᴏᴘ - ᴇɴᴅ'
+  gear: '&8ѕʜᴏᴘ - ɢᴇᴀʀ'
+  food: '&8ѕʜᴏᴘ - ꜰᴏᴏᴅ'
+  nether: '&8ѕʜᴏᴘ - ɴᴇᴛʜᴇʀ'
+
+#Here you can change the back button in the GUI
+back-button:
+  displayname: '&#FF0000ʙᴀᴄᴋ'
+  material: RED_STAINED_GLASS_PANE
+  lore:
+    - '&fClick to return'
+
+#This Plugin supports custom sounds, you can change them here
+sounds:
+  click-sound: "ui.button.click"
+  decline-sound: "entity.villager.no"
+  buy-sound: "entity.experience_orb.pickup"
+  open-sound: ""
