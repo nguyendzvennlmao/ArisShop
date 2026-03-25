@@ -1,3 +1,7 @@
+shop-item-menu:
+  title: '&8ѕʜᴏᴘ - ᴇɴᴅ'
+  rows: 3
+  
 items:
   ender-chest:
     material: ENDER_CHEST
