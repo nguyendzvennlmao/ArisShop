@@ -1,0 +1,54 @@
+items:
+  obsidian:
+    material: OBSIDIAN
+    price: 100
+    slot: 9
+    amount: 1
+
+  end-crystal:
+    material: END_CRYSTAL
+    price: 350
+    slot: 10
+    amount: 1
+
+  respawn-anchor:
+    material: RESPAWN_ANCHOR
+    price: 1000
+    slot: 11
+    amount: 1
+
+  glowstone:
+    material: GLOWSTONE
+    price: 100
+    slot: 12
+    amount: 1
+
+  totem-of-undying:
+    material: TOTEM_OF_UNDYING
+    price: 1500
+    slot: 13
+    amount: 1
+
+  ender-pearl:
+    material: ENDER_PEARL
+    price: 75
+    slot: 14
+    amount: 1
+
+  golden-apple:
+    material: GOLDEN_APPLE
+    price: 250
+    slot: 15
+    amount: 1
+
+  bottle-o-enchanting:
+    material: EXPERIENCE_BOTTLE
+    price: 100
+    slot: 16
+    amount: 1
+
+  arrow:
+    material: ARROW
+    price: 500
+    slot: 17
+    amount: 1
