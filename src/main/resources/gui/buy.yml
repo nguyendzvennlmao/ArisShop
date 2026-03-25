@@ -1,0 +1,82 @@
+# Placeholder for buy.yml
+# - %price% - Price of the item
+# - %clicked-item% - The item you clicked to buy
+# - %clicked-name% - The displayname of the item you clicked to buy
+# - %clicked-amount% - The amount of the item you clicked to buy
+# - %amount% - The amount you want to buy
+
+#Fill-Material Settings
+fill:
+  enabled: false
+  material: "BLACK_STAINED_GLASS_PANE"
+  display-name: ""
+  sound: "ENTITY_VILLAGER_NO"
+  slots: "0-8,9-17,18-26"
+
+confirm-menu:
+  rows: 3
+  title: "&8ʙᴜʏɪɴɢ"
+
+  confirm-purchase:
+    slot: 23
+    material: LIME_STAINED_GLASS_PANE
+    displayname: '&#04fc04ᴄᴏɴғɪʀᴍ'
+    lore:
+      - '&fClick to buy'
+
+  decline-purchase:
+    displayname: '&#fc0404ᴄᴀɴᴄᴇʟ'
+    slot: 21
+    material: RED_STAINED_GLASS_PANE
+    lore:
+      - '&fClick to cancel'
+
+  item-purchase:
+    material: '%clicked-item%'
+    slot: 13
+    amount: '%clicked-amount%'
+    lore:
+      - '&fAmount: &a%amount%'
+      - '&fPrice: &a%price%'
+
+  add1:
+    slot: 15
+    amount: 1
+    action: add1
+    displayname: '&aAdd 1'
+    material: LIME_STAINED_GLASS_PANE
+
+  add10:
+    action: add10
+    slot: 16
+    material: LIME_STAINED_GLASS_PANE
+    displayname: '&aAdd 10'
+    amount: 10
+
+  add64:
+    displayname: '&aSet to 64'
+    material: LIME_STAINED_GLASS_PANE
+    action: add64
+    slot: 17
+    amount: 64
+
+  remove1:
+    slot: 11
+    action: remove1
+    displayname: '&cRemove 1'
+    amount: 1
+    material: RED_STAINED_GLASS_PANE
+
+  remove10:
+    material: RED_STAINED_GLASS_PANE
+    slot: 10
+    action: remove10
+    amount: 10
+    displayname: '&cRemove 10'
+
+  remove64:
+    displayname: '&cRemove 64'
+    material: RED_STAINED_GLASS_PANE
+    slot: 9
+    action: remove64
+    amount: 64
