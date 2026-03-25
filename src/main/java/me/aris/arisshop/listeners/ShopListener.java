@@ -2,6 +2,7 @@ package me.aris.arisshop.listeners;
 
 import me.aris.arisshop.ArisShop;
 import me.aris.arisshop.models.CategoryInventory;
+import me.aris.arisshop.utils.HexColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,16 +33,17 @@ public class ShopListener implements Listener {
             return;
         }
 
-        if (title.contains("ѕʜᴏᴘ")) {
+        File mainGuiFile = new File(ArisShop.getInstance().getDataFolder(), "gui/maingui.yml");
+        FileConfiguration mainGuiConfig = YamlConfiguration.loadConfiguration(mainGuiFile);
+        String mainTitle = HexColor.format(mainGuiConfig.getString("main-menu.title", ""));
+
+        if (title.equals(mainTitle)) {
             event.setCancelled(true);
-            File file = new File(ArisShop.getInstance().getDataFolder(), "gui/maingui.yml");
-            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-            
-            if (config.contains("main-menu.categories")) {
-                for (String key : config.getConfigurationSection("main-menu.categories").getKeys(false)) {
-                    if (event.getSlot() == config.getInt("main-menu.categories." + key + ".slot")) {
+            if (mainGuiConfig.contains("main-menu.categories")) {
+                for (String key : mainGuiConfig.getConfigurationSection("main-menu.categories").getKeys(false)) {
+                    if (event.getSlot() == mainGuiConfig.getInt("main-menu.categories." + key + ".slot")) {
                         player.playSound(player.getLocation(), clickSnd, 1f, 1f);
-                        String action = config.getString("main-menu.categories." + key + ".action");
+                        String action = mainGuiConfig.getString("main-menu.categories." + key + ".action");
                         if (action != null) new CategoryInventory().openSubShop(player, action);
                         return;
                     }
@@ -51,7 +53,6 @@ public class ShopListener implements Listener {
             event.setCancelled(true);
             if (player.getInventory().firstEmpty() == -1) {
                 player.playSound(player.getLocation(), noSnd, 1f, 1f);
-                return;
             }
         } else {
             event.setCancelled(true);
