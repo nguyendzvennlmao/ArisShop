@@ -14,10 +14,10 @@ public class ArisShop extends JavaPlugin {
         instance = this;
         saveDefaultConfig();
         
-        String[] files = {"gui/maingui.yml", "gui/buy.yml", "shops/food.yml", "shops/gear.yml", "shops/end.yml", "shops/nether.yml"};
-        for (String f : files) {
-            File file = new File(getDataFolder(), f);
-            if (!file.exists()) saveResource(f, false);
+        String[] resources = {"gui/maingui.yml", "gui/buy.yml", "shops/food.yml", "shops/gear.yml", "shops/end.yml", "shops/nether.yml"};
+        for (String res : resources) {
+            File f = new File(getDataFolder(), res);
+            if (!f.exists()) saveResource(res, false);
         }
 
         getCommand("arisshop").setExecutor(new ShopCommand());
