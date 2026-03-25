@@ -71,4 +71,4 @@ public class CategoryInventory {
         String openSound = mainConfig.getString("sounds.open-sound", "");
         if (!openSound.isEmpty()) player.playSound(player.getLocation(), openSound, 1f, 1f);
     }
-            }
+                                                    }
