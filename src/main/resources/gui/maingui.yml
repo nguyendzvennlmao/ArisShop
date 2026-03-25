@@ -1,0 +1,44 @@
+main-menu:
+  title: '&8ѕʜᴏᴘ'
+  rows: 3
+
+  #Fill-Material Settings
+  fill:
+    enabled: false
+    material: "BLACK_STAINED_GLASS_PANE"
+    display-name: ""
+    sound: "ENTITY_VILLAGER_NO"
+    slots: "1-9"
+
+  categories:
+    end:
+      displayname: '&#00fc88ᴇɴᴅ'
+      material: END_STONE
+      action: end
+      slot: 11
+      lore:
+        - '&fClick to view the end shop'
+
+    nether:
+      displayname: '&#00fc88ɴᴇᴛʜᴇʀ'
+      material: NETHERRACK
+      action: nether
+      slot: 12
+      lore:
+        - '&fClick to view the nether shop'
+
+    gear:
+      displayname: '&#00fc88ɢᴇᴀʀ'
+      material: TOTEM_OF_UNDYING
+      action: gear
+      slot: 13
+      lore:
+        - '&fClick to view the gear shop'
+
+    food:
+      displayname: '&#00fc88ꜰᴏᴏᴅ'
+      material: COOKED_BEEF
+      action: food
+      slot: 14
+      lore:
+        - '&fClick to view the food shop'
