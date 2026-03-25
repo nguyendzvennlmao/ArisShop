@@ -1,3 +1,7 @@
+shop-item-menu:
+  title: '&8ѕʜᴏᴘ - ꜰᴏᴏᴅ'
+  rows: 3
+
 items:
   potato:
     material: POTATO
