@@ -1,3 +1,7 @@
+shop-item-menu:
+  title: '&8ѕʜᴏᴘ - ɴᴇᴛʜᴇʀ'
+  rows: 3
+
 items:
   blaze-rod:
     material: BLAZE_ROD
