@@ -21,12 +21,12 @@ public class ShopListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         String title = event.getView().getTitle();
-
         String clickSnd = mainConfig.getString("sounds.click-sound", "ui.button.click");
         Material backMat = Material.valueOf(mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE").toUpperCase());
+        
+        event.setCancelled(true);
 
         if (event.getCurrentItem().getType() == backMat) {
-            event.setCancelled(true);
             player.playSound(player.getLocation(), clickSnd, 1f, 1f);
             new CategoryInventory().openCategoryMenu(player);
             return;
@@ -36,24 +36,19 @@ public class ShopListener implements Listener {
         FileConfiguration mainGuiConfig = YamlConfiguration.loadConfiguration(mainGuiFile);
         String mainTitle = HexColor.format(mainGuiConfig.getString("main-menu.title", ""));
 
-        event.setCancelled(true);
-
         if (title.equalsIgnoreCase(mainTitle)) {
-            if (mainGuiConfig.contains("main-menu.categories")) {
-                for (String key : mainGuiConfig.getConfigurationSection("main-menu.categories").getKeys(false)) {
-                    if (event.getSlot() == mainGuiConfig.getInt("main-menu.categories." + key + ".slot")) {
-                        player.playSound(player.getLocation(), clickSnd, 1f, 1f);
-                        String action = mainGuiConfig.getString("main-menu.categories." + key + ".action");
-                        if (action != null) new CategoryInventory().openSubShop(player, action);
-                        return;
-                    }
+            for (String key : mainGuiConfig.getConfigurationSection("main-menu.categories").getKeys(false)) {
+                if (event.getSlot() == mainGuiConfig.getInt("main-menu.categories." + key + ".slot")) {
+                    player.playSound(player.getLocation(), clickSnd, 1f, 1f);
+                    new CategoryInventory().openSubShop(player, mainGuiConfig.getString("main-menu.categories." + key + ".action"));
+                    return;
                 }
             }
         } else if (title.toLowerCase().contains("confirm") || title.toLowerCase().contains("buy")) {
-
+            return;
         } else {
             player.playSound(player.getLocation(), clickSnd, 1f, 1f);
             new CategoryInventory().openBuyMenu(player);
         }
     }
-}
+            }
