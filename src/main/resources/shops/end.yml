@@ -1,0 +1,54 @@
+items:
+  ender-chest:
+    material: ENDER_CHEST
+    price: 2500
+    slot: 9
+    amount: 1
+
+  ender-pearl:
+    material: ENDER_PEARL
+    price: 75
+    slot: 10
+    amount: 1
+
+  end-stone:
+    material: END_STONE
+    price: 128
+    slot: 11
+    amount: 16
+
+  dragon-breath:
+    material: DRAGON_BREATH
+    price: 1000
+    slot: 12
+    amount: 1
+
+  end-rod:
+    material: END_ROD
+    price: 100
+    slot: 13
+    amount: 1
+
+  chorus-fruit:
+    material: CHORUS_FRUIT
+    price: 108
+    slot: 14
+    amount: 1
+
+  popped-chorus-fruit:
+    material: POPPED_CHORUS_FRUIT
+    price: 24
+    slot: 15
+    amount: 1
+
+  shulker-shell:
+    material: SHULKER_SHELL
+    price: 350
+    slot: 16
+    amount: 1
+
+  shulker-box:
+    material: SHULKER_BOX
+    price: 800
+    slot: 17
+    amount: 1
