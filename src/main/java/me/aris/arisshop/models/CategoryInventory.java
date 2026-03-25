@@ -31,10 +31,24 @@ public class CategoryInventory {
         File file = new File(ArisShop.getInstance().getDataFolder(), path);
         if (!file.exists()) return;
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration mainConfig = ArisShop.getInstance().getConfig();
         
-        int rows = isMain ? config.getInt("main-menu.rows", 3) : config.getInt("rows", 6);
-        String title = HexColor.format(isMain ? config.getString("main-menu.title") : config.getString("title"));
-        Inventory inv = Bukkit.createInventory(null, rows * 9, title);
+        int rows = isMain ? config.getInt("main-menu.rows", 3) : config.getInt("rows", 3);
+        String titleKey = isMain ? "main-menu.title" : "title";
+        Inventory inv = Bukkit.createInventory(null, rows * 9, HexColor.format(config.getString(titleKey, "Shop")));
+
+        if (!isMain) {
+            String bMat = mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE");
+            int bSlot = mainConfig.getInt("back-button.slot", 22);
+            ItemStack back = new ItemStack(Material.valueOf(bMat.toUpperCase()));
+            ItemMeta bMeta = back.getItemMeta();
+            bMeta.setDisplayName(HexColor.format(mainConfig.getString("back-button.displayname")));
+            List<String> bLore = new ArrayList<>();
+            for (String s : mainConfig.getStringList("back-button.lore")) bLore.add(HexColor.format(s));
+            bMeta.setLore(bLore);
+            back.setItemMeta(bMeta);
+            if (bSlot < inv.getSize()) inv.setItem(bSlot, back);
+        }
 
         if (config.contains(section)) {
             for (String key : config.getConfigurationSection(section).getKeys(false)) {
@@ -54,5 +68,7 @@ public class CategoryInventory {
             }
         }
         player.openInventory(inv);
+        String openSound = mainConfig.getString("sounds.open-sound", "");
+        if (!openSound.isEmpty()) player.playSound(player.getLocation(), openSound, 1f, 1f);
     }
-                        }
+                }
