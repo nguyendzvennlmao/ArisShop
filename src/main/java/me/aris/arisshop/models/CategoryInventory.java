@@ -16,33 +16,38 @@ import java.util.List;
 
 public class CategoryInventory {
     public void openCategoryMenu(Player player) {
-        File file = new File(ArisShop.getInstance().getDataFolder(), "gui/maingui.yml");
+        openGeneric(player, "gui/maingui.yml");
+    }
+
+    public void openSubShop(Player player, String shopName) {
+        openGeneric(player, "shops/" + shopName);
+    }
+
+    public void openBuyMenu(Player player) {
+        openGeneric(player, "gui/buy.yml");
+    }
+
+    private void openGeneric(Player player, String path) {
+        File file = new File(ArisShop.getInstance().getDataFolder(), path);
+        if (!file.exists()) return;
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         
-        String title = HexColor.format(config.getString("title", "&0Shop"));
-        int size = config.getInt("size", 27);
-        Inventory inv = Bukkit.createInventory(null, size, title);
-
+        Inventory inv = Bukkit.createInventory(null, config.getInt("size", 27), HexColor.format(config.getString("title")));
         if (config.contains("items")) {
             for (String key : config.getConfigurationSection("items").getKeys(false)) {
-                int slot = config.getInt("items." + key + ".slot");
-                String matName = config.getString("items." + key + ".material");
-                if (matName == null) continue;
-                
-                ItemStack item = new ItemStack(Material.valueOf(matName.toUpperCase()));
-                ItemMeta meta = item.getItemMeta();
-                
-                meta.setDisplayName(HexColor.format(config.getString("items." + key + ".display_name")));
-                List<String> lore = new ArrayList<>();
-                for (String line : config.getStringList("items." + key + ".lore")) {
-                    lore.add(HexColor.format(line));
-                }
-                meta.setLore(lore);
-                
-                item.setItemMeta(meta);
-                inv.setItem(slot, item);
+                try {
+                    Material mat = Material.valueOf(config.getString("items." + key + ".material").toUpperCase());
+                    ItemStack item = new ItemStack(mat);
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(HexColor.format(config.getString("items." + key + ".display_name")));
+                    List<String> lore = new ArrayList<>();
+                    for (String s : config.getStringList("items." + key + ".lore")) lore.add(HexColor.format(s));
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                    inv.setItem(config.getInt("items." + key + ".slot"), item);
+                } catch (Exception ignored) {}
             }
         }
         player.openInventory(inv);
     }
-        }
+                 }
