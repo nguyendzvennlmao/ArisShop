@@ -23,7 +23,6 @@ public class ShopListener implements Listener {
         String title = event.getView().getTitle();
 
         String clickSnd = mainConfig.getString("sounds.click-sound", "ui.button.click");
-        String noSnd = mainConfig.getString("sounds.decline-sound", "entity.villager.no");
 
         Material backMat = Material.valueOf(mainConfig.getString("back-button.material", "RED_STAINED_GLASS_PANE").toUpperCase());
         if (event.getCurrentItem().getType() == backMat) {
@@ -51,13 +50,10 @@ public class ShopListener implements Listener {
             }
         } else if (title.contains("Confirm") || title.contains("Buy")) {
             event.setCancelled(true);
-            if (player.getInventory().firstEmpty() == -1) {
-                player.playSound(player.getLocation(), noSnd, 1f, 1f);
-            }
         } else {
             event.setCancelled(true);
             player.playSound(player.getLocation(), clickSnd, 1f, 1f);
             new CategoryInventory().openBuyMenu(player);
         }
     }
-    }
+                     }
