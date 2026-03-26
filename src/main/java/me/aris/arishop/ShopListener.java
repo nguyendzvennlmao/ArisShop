@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -30,8 +31,10 @@ public class ShopListener implements Listener {
         ArisShop main = ArisShop.getInstance();
         Inventory inv = Bukkit.createInventory(null, main.getConfig().getInt("main-menu.rows") * 9, main.color(main.getConfig().getString("main-menu.title")));
         ConfigurationSection sec = main.getConfig().getConfigurationSection("main-menu.categories");
-        for (String key : sec.getKeys(false)) {
-            inv.setItem(sec.getInt(key + ".slot"), createIcon(Material.valueOf(sec.getString(key + ".material")), main.color(sec.getString(key + ".displayname")), sec.getStringList(key + ".lore"), 0, 0));
+        if (sec != null) {
+            for (String key : sec.getKeys(false)) {
+                inv.setItem(sec.getInt(key + ".slot"), createIcon(Material.valueOf(sec.getString(key + ".material")), main.color(sec.getString(key + ".displayname")), sec.getStringList(key + ".lore"), 0, 0));
+            }
         }
         main.playSound(p, "menu-open");
         p.openInventory(inv);
@@ -82,8 +85,10 @@ public class ShopListener implements Listener {
 
         if (title.equals(main.color(main.getConfig().getString("main-menu.title")))) {
             ConfigurationSection sec = main.getConfig().getConfigurationSection("main-menu.categories");
-            for (String key : sec.getKeys(false)) {
-                if (e.getSlot() == sec.getInt(key + ".slot")) { openCategory(p, key); return; }
+            if (sec != null) {
+                for (String key : sec.getKeys(false)) {
+                    if (e.getSlot() == sec.getInt(key + ".slot")) { openCategory(p, key); return; }
+                }
             }
         } else if (title.equals(main.color(main.getConfig().getString("gui.quantity-selector.title")))) {
             handleConfirmClick(p, e.getSlot(), e.getInventory());
@@ -126,7 +131,7 @@ public class ShopListener implements Listener {
         double total = ctx.price * ctx.amount;
 
         if (p.getInventory().firstEmpty() == -1) {
-            handleMessage(p, "full-inventory", null, 0);
+            handleMessage(p, "full-inventory", null, 0, p);
             main.playSound(p, "purchase-fail");
             return;
         }
@@ -137,7 +142,7 @@ public class ShopListener implements Listener {
             try { bal = Double.parseDouble(balStr); } catch (Exception e) { bal = 0; }
             if (bal < total) {
                 main.playSound(p, "purchase-fail");
-                handleMessage(p, "insufficient-shards", null, 0);
+                handleMessage(p, "insufficient-shards", null, 0, p);
                 return;
             }
             String cmd = main.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)total));
@@ -145,7 +150,7 @@ public class ShopListener implements Listener {
         } else {
             if (ArisShop.getEconomy().getBalance(p) < total) {
                 main.playSound(p, "purchase-fail");
-                handleMessage(p, "insufficient-funds", null, 0);
+                handleMessage(p, "insufficient-funds", null, 0, p);
                 return;
             }
             ArisShop.getEconomy().withdrawPlayer(p, total);
@@ -154,10 +159,10 @@ public class ShopListener implements Listener {
         main.playSound(p, "purchase-success");
         String give = config.getString("items." + ctx.itemId + ".command").replace("%player%", p.getName()).replace("%amount%", String.valueOf(ctx.amount));
         Bukkit.getGlobalRegionScheduler().execute(main, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), give));
-        handleMessage(p, "buy-success", ctx.displayName, ctx.amount);
+        handleMessage(p, "buy-success", ctx.displayName, ctx.amount, p);
     }
 
-    private void handleMessage(Player p, String key, String item, int amount) {
+    public static void handleMessage(Player p, String key, String item, int amount, CommandSender sender) {
         ArisShop main = ArisShop.getInstance();
         ConfigurationSection msgSec = main.getConfig().getConfigurationSection("messages." + key);
         if (msgSec == null) return;
@@ -165,11 +170,11 @@ public class ShopListener implements Listener {
         String rawMsg = msgSec.getString("text");
         String formatted = main.color(main.getConfig().getString("messages.prefix") + rawMsg.replace("%item%", item != null ? item : "").replace("%amount%", String.valueOf(amount)));
         
-        if (msgSec.getBoolean("chat")) {
-            p.sendMessage(formatted);
-        }
-        if (msgSec.getBoolean("actionbar")) {
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(formatted));
+        if (p != null) {
+            if (msgSec.getBoolean("chat")) p.sendMessage(formatted);
+            if (msgSec.getBoolean("actionbar")) p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(formatted));
+        } else {
+            sender.sendMessage(formatted);
         }
     }
 
@@ -217,4 +222,4 @@ public class ShopListener implements Listener {
         item.setItemMeta(meta);
         return item;
     }
-                }
+    }
