@@ -30,7 +30,20 @@ public class ArisShop extends JavaPlugin {
 
     private void createShopFolder() {
         File shopFolder = new File(getDataFolder(), "shop");
-        if (!shopFolder.exists()) shopFolder.mkdirs();
+        if (!shopFolder.exists()) {
+            shopFolder.mkdirs();
+        }
+        if (getConfig().getConfigurationSection("main-menu.categories") != null) {
+            for (String key : getConfig().getConfigurationSection("main-menu.categories").getKeys(false)) {
+                String fileName = "shop/" + key + ".yml";
+                if (getResource(fileName) != null) {
+                    File outFile = new File(getDataFolder(), fileName);
+                    if (!outFile.exists()) {
+                        saveResource(fileName, false);
+                    }
+                }
+            }
+        }
     }
 
     private boolean setupEconomy() {
