@@ -1,13 +1,14 @@
 package me.aris.arishop;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,11 +20,17 @@ public class ArisShop extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
+        createShopFolder();
         if (!setupEconomy()) {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
+    }
+
+    private void createShopFolder() {
+        File shopFolder = new File(getDataFolder(), "shop");
+        if (!shopFolder.exists()) shopFolder.mkdirs();
     }
 
     private boolean setupEconomy() {
@@ -49,6 +56,14 @@ public class ArisShop extends JavaPlugin {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
+    public void playSound(Player p, String path) {
+        String soundName = getConfig().getString("sounds." + path);
+        if (soundName == null || soundName.equalsIgnoreCase("none")) return;
+        try {
+            p.playSound(p.getLocation(), Sound.valueOf(soundName.toUpperCase()), 1f, 1f);
+        } catch (Exception ignored) {}
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("shop") && sender instanceof Player) {
@@ -57,4 +72,4 @@ public class ArisShop extends JavaPlugin {
         }
         return false;
     }
-  }
+            }
