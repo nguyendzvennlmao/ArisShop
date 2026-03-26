@@ -1,0 +1,543 @@
+messages:
+  prefix: "&8[&aDonutShop&8] &r"
+  no-permission: "&cYou don't have permission!"
+  insufficient-funds: "&cYou don't have enough money!"
+  insufficient-shards: "&cYou don't have enough shards!"
+  item-bought: "&aYou bought &e%amount%x %item% &afor &e$%price%&a!"
+  item-bought-shards: "&aYou bought &e%amount%x %item% &afor &e%price% Shards&a!"
+  reload: "&aConfiguration reloaded!"
+currencies:
+  shards:
+    balance-placeholder: "%arisshards_balance%"
+    take-command: "shards take %player% %price%"
+    
+main-menu:
+  title: "&8ѕʜᴏᴘ"
+  rows: 3
+  categories:
+    end:
+      displayname: "&#0bf592ᴇɴᴅ"
+      material: END_STONE
+      slot: 11
+      lore:
+        - "&fClick to view"
+    nether:
+      displayname: "&#0bf592ɴᴇᴛʜᴇʀ"
+      material: MAGMA_BLOCK
+      slot: 12
+      lore:
+        - "&fClick to view"
+    gear:
+      displayname: "&#0bf592ɢᴇᴀʀ"
+      material: TOTEM_OF_UNDYING
+      slot: 13
+      lore:
+        - "&fClick to view"
+    food:
+      displayname: "&#0bf592ꜰᴏᴏᴅ"
+      material: COOKED_BEEF
+      slot: 14
+      lore:
+        - "&fClick to view"
+    shards:
+      displayname: "&#0bf592sʜᴀʀᴅs"
+      material: AMETHYST_SHARD
+      slot: 15
+      lore:
+        - "&fClick to view"
+
+categories:
+  end:
+    title: "&8sʜᴏᴘ - ᴇɴᴅ"
+    rows: 3
+    items:
+      ender-chest:
+        slot: 9
+        material: ENDER_CHEST
+        displayname: "&fEnder Chest"
+        price: 2500
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      ender-pearl:
+        slot: 10
+        material: ENDER_PEARL
+        displayname: "&fEnder Pearl"
+        price: 75
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      end-stone:
+        slot: 11
+        material: END_STONE
+        displayname: "&fEnd Stone"
+        price: 32
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      dragon-breath:
+        slot: 12
+        material: DRAGON_BREATH
+        displayname: "&eDragon's Breath"
+        price: 32
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      end-rod:
+        slot: 13
+        material: END_ROD
+        displayname: "&fEnd Rod"
+        price: 100
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      chorus-fruit:
+        slot: 14
+        material: CHORUS_FRUIT
+        displayname: "&fChorus Fruit"
+        price: 10
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      popped-chorus-fruit:
+        slot: 15
+        material: POPPED_CHORUS_FRUIT
+        displayname: "&fPopped Chorus Fruit"
+        price: 15
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      shulker-shell:
+        slot: 16
+        material: SHULKER_SHELL
+        displayname: "&fShulker Shell"
+        price: 350
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      shulker-box:
+        slot: 17
+        material: SHULKER_BOX
+        displayname: "&fShulker Box"
+        price: 800
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+
+  food:
+    title: "&8sʜᴏᴘ - ғᴏᴏᴅ"
+    rows: 3
+    items:
+      potato:
+        slot: 9
+        material: POTATO
+        displayname: "&fPotato"
+        price: 25
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      sweet-barries:
+        slot: 10
+        material: SWEET_BERRIES
+        displayname: "&fSweet Berries"
+        price: 15
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      melon-slice:
+        slot: 11
+        material: MELON_SLICE
+        displayname: "&fMelon Slice"
+        price: 10
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      carrot:
+        slot: 12
+        material: CARROT
+        displayname: "&fCarrot"
+        price: 25
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      apple:
+        slot: 13
+        material: APPLE
+        displayname: "&fApple"
+        price: 25
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      cooked-chicken:
+        slot: 14
+        material: COOKED_CHICKEN
+        displayname: "&fCooked Chicken"
+        price: 30
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      food-steak:
+        slot: 15
+        material: COOKED_BEEF
+        displayname: "&fSteak"
+        price: 35
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      golden-carrot:
+        slot: 16
+        material: GOLDEN_CARROT
+        displayname: "&fGolden Carrot"
+        price: 50
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      food-golden-apple:
+        slot: 17
+        material: GOLDEN_APPLE
+        displayname: "&f&bGolden Apple"
+        price: 250
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+
+  gear:
+    title: "&8sʜᴏᴘ - ɢᴇᴀʀ"
+    rows: 3
+    items:
+      obsidian:
+        slot: 9
+        material: OBSIDIAN
+        displayname: "&fObsidian"
+        price: 100
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      end-crystal:
+        slot: 10
+        material: END_CRYSTAL
+        displayname: "&fEnd Crystal"
+        price: 350
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      respawn_anchor:
+        slot: 11
+        material: RESPAWN_ANCHOR
+        displayname: "&fRespawn Anchor"
+        price: 1000
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      glowstone:
+        slot: 12
+        material: GLOWSTONE
+        displayname: "&fGlowstone"
+        price: 100
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      totem-of-unfying:
+        slot: 13
+        material: TOTEM_OF_UNDYING
+        displayname: "&f&eTotem of Undying"
+        price: 1250
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      gear-ender-pearl:
+        slot: 14
+        material: ENDER_PEARL
+        displayname: "&fEnder Pearl"
+        price: 75
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      golden-apple:
+        slot: 15
+        material: GOLDEN_APPLE
+        displayname: "&f&bGolden Apple"
+        price: 250
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      bottle-enchanting:
+        slot: 16
+        material: EXPERIENCE_BOTTLE
+        displayname: "&f&eBottle o' Enchanting"
+        price: 100
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      arrow:
+        slot: 17
+        material: ARROW
+        displayname: "&fArrow"
+        price: 500
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+
+  nether:
+    title: "&8sʜᴏᴘ - ɴᴇᴛʜᴇʀ"
+    rows: 3
+    items:
+      blaze-rod:
+        slot: 9
+        material: BLAZE_ROD
+        displayname: "&fBlaze Rod"
+        price: 150
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      glowstone-dust:
+        slot: 10
+        material: GLOWSTONE_DUST
+        displayname: "&fGlowstone Dust"
+        price: 15
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      magma-cream:
+        slot: 11
+        material: MAGMA_CREAM
+        displayname: "&fMagma Cream"
+        price: 15
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      ghast-tear:
+        slot: 12
+        material: GHAST_TEAR
+        displayname: "&fGhast Tear"
+        price: 350
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      nether-quartz:
+        slot: 13
+        material: QUARTZ
+        displayname: "&fNether Quartz"
+        price: 15
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      soul-sand:
+        slot: 14
+        material: SOUL_SAND
+        displayname: "&fSoul Sand"
+        price: 15
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      magma-block:
+        slot: 15
+        material: MAGMA_BLOCK
+        displayname: "&fMagma Block"
+        price: 35
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      crying-obsidian:
+        slot: 16
+        material: CRYING_OBSIDIAN
+        displayname: "&fCrying Obsidian"
+        price: 150
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+      nether-wart:
+        slot: 17
+        material: NETHER_WART
+        displayname: "&fNether Wart"
+        price: 20
+        amount: 1
+        lore:
+          - "&fBuy Price: &#0bf52b%price%"
+
+  shards:
+    title: "ѕʜᴏᴘ - ꜱʜᴀʀᴅ"
+    rows: 3
+    currency: SHARDS
+    items:
+      common_key:
+        slot: 2
+        material: TRIPWIRE_HOOK
+        displayname: "&#24981aᴄᴏᴍᴍᴏɴ ᴋᴇʏ"
+        price: 200
+        command: "dc givekey %player% Common %amount%"
+        amount: 1
+        lore:
+          - "&fBuy Price: &#a303f9%price%"
+      prime_key:
+        slot: 3
+        material: TRIPWIRE_HOOK
+        displayname: "&#2386d3ᴘʀɪᴍᴇ ᴋᴇʏ"
+        price: 1500
+        command: "dc givekey %player% Prime %amount%"
+        amount: 1
+        lore:
+          - "&fBuy Price: &#a303f9%price%"
+      gold_key:
+        slot: 4
+        material: TRIPWIRE_HOOK
+        displayname: "&#e3b900ɢᴏʟᴅ ᴋᴇʏ"
+        price: 1500
+        command: "dc givekey %player% Gold %amount%"
+        amount: 1
+        lore:
+          - "&fBuy Price: &#a303f9%price%"
+      amethyst_key:
+        slot: 5
+        material: TRIPWIRE_HOOK
+        displayname: "&#9966CCᴀᴍᴇᴛʜʏꜱᴛ ᴋᴇʏ"
+        price: 4000
+        command: "dc givekey %player% Amethyst %amount%"
+        amount: 1
+        lore:
+          - "&fBuy Price: &#a303f9%price%"
+      crimson_key:
+        slot: 6
+        material: TRIPWIRE_HOOK
+        displayname: "&#c42119ᴄʀɪᴍꜱᴏɴ ᴋᴇʏ"
+        price: 2000
+        command: "dc givekey %player% Crimson %amount%"
+        amount: 1
+        lore:
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_pig:
+        slot: 9
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 250
+        command: "ds give %player% pig %amount%"
+        amount: 1
+        lore:
+          - "&ePig"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_cow:
+        slot: 10
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 350
+        command: "ds give %player% cow %amount%"
+        amount: 1
+        lore:
+          - "&eCow"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_zombie:
+        slot: 11
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 400
+        command: "ds give %player% zombie %amount%"
+        amount: 1
+        lore:
+          - "&eZombie"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_spider:
+        slot: 12
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 750
+        command: "ds give %player% spider %amount%"
+        amount: 1
+        lore:
+          - "&eSpider"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_skeleton:
+        slot: 13
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 500
+        command: "ds give %player% skeleton %amount%"
+        amount: 1
+        lore:
+          - "&eSkeleton"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_creeper:
+        slot: 14
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 625
+        command: "ds give %player% creeper %amount%"
+        amount: 1
+        lore:
+          - "&eCreeper"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_zombified_piglin:
+        slot: 15
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 750
+        command: "ds give %player% zombie_piglin %amount%"
+        amount: 1
+        lore:
+          - "&eZombified Piglin"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_blaze:
+        slot: 16
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 1000
+        command: "ds give %player% blaze %amount%"
+        amount: 1
+        lore:
+          - "&eBlaze"
+          - "&fBuy Price: &#a303f9%price%"
+      spawner_iron_golem:
+        slot: 17
+        material: SPAWNER
+        displayname: "&dSpawner"
+        price: 1500
+        command: "ds give %player% iron_golem %amount%"
+        amount: 1
+        lore:
+          - "&eIron Golem"
+          - "&fBuy Price: &#a303f9%price%"
+
+gui:
+  quantity-selector:
+    title: "&8ᴄᴏɴғɪʀᴍ ᴘᴜʀᴄʜᴀsᴇ"
+    rows: 3
+    confirm-button:
+      slot: 15
+      material: LIME_STAINED_GLASS_PANE
+      displayname: "&aᴄᴏɴғɪʀᴍ"
+      lore:
+        - "&fTotal Price: &#0bf52b%total_price%"
+        - "&fAmount: &e%amount%x"
+        - ""
+        - "&7Click to purchase"
+    cancel-button:
+      slot: 11
+      material: RED_STAINED_GLASS_PANE
+      displayname: "&cᴄᴀɴᴄᴇʟ"
+      lore:
+        - "&fClick to cancel"
+    item-preview:
+      slot: 13
+      lore:
+        - "&fPrice per item: &#0bf52b%price%"
+        - "&fCurrent Amount: &e%amount%x"
+        - ""
+        - "&7Left-Click: &a+1"
+        - "&7Right-Click: &c-1"
+        - "&7Shift + Left-Click: &a+10"
+        - "&7Shift + Right-Click: &c-10"
+  back-button:
+    material: RED_STAINED_GLASS_PANE
+    displayname: "&#e00202ʙᴀᴄᴋ"
+    lore:
+      - "&fClick to return"
+  next-page:
+    material: ARROW
+    displayname: "&#f00f0cɴᴇxᴛ"
+    lore:
+      - "&fClick to go to next page"
+  last-page:
+    material: ARROW
+    displayname: "&#f00f0cʙᴀᴄᴋ"
+    lore:
+      - "&fClick to go to last page"
+      
