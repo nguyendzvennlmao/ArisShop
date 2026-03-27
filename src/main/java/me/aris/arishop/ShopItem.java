@@ -13,16 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShopItem {
-    public static void open(Player p, String categoryId) {
+    public static void open(Player p, String fileName) {
         ArisShop m = ArisShop.getInstance();
-        File f = new File(m.getDataFolder() + "/shop", categoryId + ".yml");
+        if (!fileName.endsWith(".yml")) fileName = fileName + ".yml";
+        File f = new File(m.getDataFolder() + "/shop", fileName);
         if (!f.exists()) return;
         YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
         Inventory inv = Bukkit.createInventory(null, c.getInt("rows") * 9, m.color(c.getString("title")));
         ConfigurationSection items = c.getConfigurationSection("items");
         if (items != null) {
             for (String k : items.getKeys(false)) {
-                ItemStack item = new ItemStack(Material.valueOf(items.getString(k + ".material")));
+                ItemStack item = new ItemStack(Material.valueOf(items.getString(k + ".material").toUpperCase()));
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(m.color(items.getString(k + ".displayname")));
                 List<String> lore = new ArrayList<>();
