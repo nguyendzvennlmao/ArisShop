@@ -19,7 +19,12 @@ public class ArisShop extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        if (!new File(getDataFolder(), "shop").exists()) new File(getDataFolder(), "shop").mkdirs();
+        
+        File shopFolder = new File(getDataFolder(), "shop");
+        if (!shopFolder.exists()) {
+            shopFolder.mkdirs();
+        }
+        
         setupEconomy();
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
     }
@@ -50,4 +55,4 @@ public class ArisShop extends JavaPlugin {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-    }
+}
