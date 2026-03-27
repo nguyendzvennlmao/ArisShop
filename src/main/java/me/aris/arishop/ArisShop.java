@@ -51,4 +51,4 @@ public class ArisShop extends JavaPlugin {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-}
+                              }
