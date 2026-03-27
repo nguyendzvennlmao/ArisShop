@@ -19,14 +19,16 @@ public class ShopMain {
             for (String key : sec.getKeys(false)) {
                 ItemStack item = new ItemStack(Material.valueOf(sec.getString(key + ".material").toUpperCase()));
                 ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(m.color(sec.getString(key + ".displayname")));
-                List<String> lore = new ArrayList<>();
-                for (String s : sec.getStringList(key + ".lore")) lore.add(m.color(s));
-                meta.setLore(lore);
-                item.setItemMeta(meta);
+                if (meta != null) {
+                    meta.setDisplayName(m.color(sec.getString(key + ".displayname")));
+                    List<String> lore = new ArrayList<>();
+                    for (String s : sec.getStringList(key + ".lore")) lore.add(m.color(s));
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                }
                 inv.setItem(sec.getInt(key + ".slot"), item);
             }
         }
         p.openInventory(inv);
     }
-                    }
+            }
