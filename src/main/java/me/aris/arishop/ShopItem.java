@@ -13,29 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShopItem {
-    public static void open(Player p, String id) {
+    public static void open(Player p, String categoryId) {
         ArisShop m = ArisShop.getInstance();
-        File f = new File(m.getDataFolder() + "/shop", id + ".yml");
+        File f = new File(m.getDataFolder() + "/shop", categoryId + ".yml");
         if (!f.exists()) return;
         YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
         Inventory inv = Bukkit.createInventory(null, c.getInt("rows") * 9, m.color(c.getString("title")));
         ConfigurationSection items = c.getConfigurationSection("items");
         if (items != null) {
             for (String k : items.getKeys(false)) {
-                inv.setItem(items.getInt(k + ".slot"), create(Material.valueOf(items.getString(k + ".material")), m.color(items.getString(k + ".displayname")), items.getStringList(k + ".lore"), items.getDouble(k + ".price")));
+                ItemStack item = new ItemStack(Material.valueOf(items.getString(k + ".material")));
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(m.color(items.getString(k + ".displayname")));
+                List<String> lore = new ArrayList<>();
+                for (String s : items.getStringList(k + ".lore")) {
+                    lore.add(m.color(s.replace("%price%", String.valueOf(items.getDouble(k + ".price")))));
+                }
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+                inv.setItem(items.getInt(k + ".slot"), item);
             }
         }
         p.openInventory(inv);
     }
-
-    private static ItemStack create(Material m, String n, List<String> l, double p) {
-        ItemStack i = new ItemStack(m);
-        ItemMeta mt = i.getItemMeta();
-        mt.setDisplayName(n);
-        List<String> cl = new ArrayList<>();
-        for (String s : l) cl.add(ArisShop.getInstance().color(s.replace("%price%", String.valueOf(p))));
-        mt.setLore(cl);
-        i.setItemMeta(mt);
-        return i;
-    }
-}
+                                                                                }
