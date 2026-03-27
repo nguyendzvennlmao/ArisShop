@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ShopListener implements Listener {
-    private static final Map<UUID, ShopContext> session = new HashMap<>();
+    public static final Map<UUID, ShopContext> session = new HashMap<>();
 
     public static class ShopContext {
         String category, itemId, currency, displayName;
@@ -28,44 +29,48 @@ public class ShopListener implements Listener {
     public void onClick(InventoryClickEvent e) {
         ArisShop main = ArisShop.getInstance();
         Player p = (Player) e.getWhoClicked();
+        InventoryHolder holder = e.getInventory().getHolder();
         if (e.getCurrentItem() == null) return;
-        String title = e.getView().getTitle();
-        e.setCancelled(true);
 
-        if (title.equals(main.color(main.getConfig().getString("main-menu.title")))) {
+        if (holder instanceof GuiManager.MainMenuHolder) {
+            e.setCancelled(true);
             ConfigurationSection sec = main.getConfig().getConfigurationSection("main-menu.categories");
             for (String key : sec.getKeys(false)) {
-                if (e.getSlot() == sec.getInt(key + ".slot")) { GuiManager.openCategory(p, key); return; }
+                if (e.getSlot() == sec.getInt(key + ".slot")) {
+                    GuiManager.openCategory(p, key);
+                    return;
+                }
             }
-        } else if (title.equals(main.color(main.getConfig().getString("gui.quantity-selector.title")))) {
+        } else if (holder instanceof GuiManager.CategoryHolder) {
+            e.setCancelled(true);
+            String catId = ((GuiManager.CategoryHolder) holder).id;
+            if (e.getSlot() == main.getConfig().getInt("gui.back-button.slot")) {
+                GuiManager.openMainMenu(p);
+                return;
+            }
+            handleShopClick(p, catId, e.getSlot());
+        } else if (holder instanceof GuiManager.ConfirmHolder) {
+            e.setCancelled(true);
             handleConfirm(p, e.getSlot(), e.getInventory());
-        } else {
-            if (e.getSlot() == main.getConfig().getInt("gui.back-button.slot")) { GuiManager.openMainMenu(p); return; }
-            handleShop(p, title, e.getSlot());
         }
     }
 
-    private void handleShop(Player p, String title, int slot) {
+    private void handleShopClick(Player p, String catId, int slot) {
         ArisShop main = ArisShop.getInstance();
-        File dir = new File(main.getDataFolder(), "shop");
-        if (dir.listFiles() == null) return;
-        for (File f : dir.listFiles()) {
-            YamlConfiguration conf = YamlConfiguration.loadConfiguration(f);
-            if (title.equals(main.color(conf.getString("title")))) {
-                ConfigurationSection items = conf.getConfigurationSection("items");
-                for (String key : items.getKeys(false)) {
-                    if (slot == items.getInt(key + ".slot")) {
-                        ShopContext ctx = new ShopContext();
-                        ctx.category = f.getName().replace(".yml", "");
-                        ctx.itemId = key;
-                        ctx.price = items.getDouble(key + ".price");
-                        ctx.displayName = main.color(items.getString(key + ".displayname"));
-                        ctx.currency = conf.getString("currency", "VAULT");
-                        session.put(p.getUniqueId(), ctx);
-                        GuiManager.openConfirm(p, ctx);
-                        return;
-                    }
-                }
+        File f = new File(main.getDataFolder() + "/shop", catId + ".yml");
+        YamlConfiguration conf = YamlConfiguration.loadConfiguration(f);
+        ConfigurationSection items = conf.getConfigurationSection("items");
+        for (String key : items.getKeys(false)) {
+            if (slot == items.getInt(key + ".slot")) {
+                ShopContext ctx = new ShopContext();
+                ctx.category = catId;
+                ctx.itemId = key;
+                ctx.price = items.getDouble(key + ".price");
+                ctx.displayName = main.color(items.getString(key + ".displayname"));
+                ctx.currency = conf.getString("currency", "VAULT");
+                session.put(p.getUniqueId(), ctx);
+                GuiManager.openConfirm(p, ctx);
+                return;
             }
         }
     }
@@ -92,37 +97,29 @@ public class ShopListener implements Listener {
     private void executePurchase(Player p, ShopContext ctx) {
         ArisShop main = ArisShop.getInstance();
         double total = ctx.price * ctx.amount;
-
         if (p.getInventory().firstEmpty() == -1) {
             p.sendMessage(main.color(main.getConfig().getString("messages.prefix") + "&cTúi đồ của bạn đã đầy!"));
-            main.playSound(p, "purchase-fail");
             return;
         }
-
         if (ctx.currency.equalsIgnoreCase("SHARDS")) {
             String balStr = PlaceholderAPI.setPlaceholders(p, main.getConfig().getString("currencies.shards.balance-placeholder"));
             if (Double.parseDouble(balStr) < total) {
                 p.sendMessage(main.color(main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.insufficient-shards.text")));
-                main.playSound(p, "purchase-fail");
                 return;
             }
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), main.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)total)));
         } else {
             if (ArisShop.getEconomy().getBalance(p) < total) {
                 p.sendMessage(main.color(main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.insufficient-funds.text")));
-                main.playSound(p, "purchase-fail");
                 return;
             }
             ArisShop.getEconomy().withdrawPlayer(p, total);
         }
-
         File f = new File(main.getDataFolder() + "/shop", ctx.category + ".yml");
         YamlConfiguration cat = YamlConfiguration.loadConfiguration(f);
         Material mat = Material.valueOf(cat.getString("items." + ctx.itemId + ".material"));
         p.getInventory().addItem(new ItemStack(mat, ctx.amount));
-
-        String msg = main.getConfig().getString("messages.buy-success.text").replace("%item%", ctx.displayName).replace("%amount%", String.valueOf(ctx.amount));
-        p.sendMessage(main.color(main.getConfig().getString("messages.prefix") + msg));
+        p.sendMessage(main.color(main.getConfig().getString("messages.prefix") + main.getConfig().getString("messages.buy-success.text").replace("%item%", ctx.displayName).replace("%amount%", String.valueOf(ctx.amount))));
         main.playSound(p, "purchase-success");
     }
-          }
+            }
