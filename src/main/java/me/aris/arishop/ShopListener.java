@@ -30,46 +30,49 @@ public class ShopListener implements Listener {
             e.setCancelled(true);
             ConfigurationSection sec = m.getConfig().getConfigurationSection("main-menu.categories");
             for (String k : sec.getKeys(false)) {
-                if (e.getSlot() == sec.getInt(k + ".slot")) { ShopItem.open(p, k); return; }
+                if (e.getSlot() == sec.getInt(k + ".slot")) {
+                    ShopItem.open(p, k);
+                    return;
+                }
             }
-        } else if (isShop(title)) {
-            e.setCancelled(true);
-            handleShop(p, title, e.getSlot());
-        } else if (title.equals(m.color(m.getConfig().getString("gui.quantity-selector.title")))) {
+            return;
+        }
+
+        File folder = new File(m.getDataFolder(), "shop");
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
+                if (title.equals(m.color(c.getString("title")))) {
+                    e.setCancelled(true);
+                    handleShopClick(p, f, e.getSlot());
+                    return;
+                }
+            }
+        }
+
+        if (title.equals(m.color(m.getConfig().getString("gui.quantity-selector.title")))) {
             e.setCancelled(true);
             handleConfirm(p, e.getSlot(), e.getInventory());
         }
     }
 
-    private boolean isShop(String title) {
-        File folder = new File(ArisShop.getInstance().getDataFolder(), "shop");
-        if (folder.listFiles() == null) return false;
-        for (File f : folder.listFiles()) {
-            YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
-            if (ArisShop.getInstance().color(c.getString("title")).equals(title)) return true;
-        }
-        return false;
-    }
-
-    private void handleShop(Player p, String title, int s) {
+    private void handleShopClick(Player p, File f, int slot) {
         ArisShop m = ArisShop.getInstance();
-        File folder = new File(m.getDataFolder(), "shop");
-        for (File f : folder.listFiles()) {
-            YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
-            if (!m.color(c.getString("title")).equals(title)) continue;
-            ConfigurationSection items = c.getConfigurationSection("items");
-            for (String k : items.getKeys(false)) {
-                if (s == items.getInt(k + ".slot")) {
-                    ShopContext ctx = new ShopContext();
-                    ctx.cat = f.getName().replace(".yml", "");
-                    ctx.item = k;
-                    ctx.price = items.getDouble(k + ".price");
-                    ctx.name = m.color(items.getString(k + ".displayname"));
-                    ctx.curr = c.getString("currency", "VAULT");
-                    sessions.put(p.getUniqueId(), ctx);
-                    ConfirmPurchase.open(p, ctx);
-                    return;
-                }
+        YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
+        ConfigurationSection items = c.getConfigurationSection("items");
+        if (items == null) return;
+        for (String k : items.getKeys(false)) {
+            if (slot == items.getInt(k + ".slot")) {
+                ShopContext ctx = new ShopContext();
+                ctx.cat = f.getName().replace(".yml", "");
+                ctx.item = k;
+                ctx.price = items.getDouble(k + ".price");
+                ctx.name = m.color(items.getString(k + ".displayname"));
+                ctx.curr = c.getString("currency", "VAULT");
+                sessions.put(p.getUniqueId(), ctx);
+                ConfirmPurchase.open(p, ctx);
+                return;
             }
         }
     }
@@ -81,7 +84,7 @@ public class ShopListener implements Listener {
         ConfigurationSection gui = m.getConfig().getConfigurationSection("gui.quantity-selector");
         if (s == gui.getInt("confirm.slot")) {
             double t = ctx.price * ctx.amount;
-            if (ctx.curr.equalsIgnoreCase("SHARDS")) {
+            if (ctx.curr != null && ctx.curr.equalsIgnoreCase("SHARDS")) {
                 double b = Double.parseDouble(PlaceholderAPI.setPlaceholders(p, m.getConfig().getString("currencies.shards.balance-placeholder")));
                 if (b < t) return;
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)t)));
@@ -104,4 +107,4 @@ public class ShopListener implements Listener {
             ConfirmPurchase.update(inv, ctx);
         }
     }
-                    }
+                        }
