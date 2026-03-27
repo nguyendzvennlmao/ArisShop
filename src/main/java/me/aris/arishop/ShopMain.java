@@ -28,6 +28,7 @@ public class ShopMain {
                 }
             }
             p.openInventory(inv);
+            p.playSound(p.getLocation(), org.bukkit.Sound.valueOf(m.getConfig().getString("sounds.menu-open")), 1, 1);
         } catch (Exception e) { p.sendMessage("§c[ArisShop] Lỗi Main Menu!"); }
     }
-}
+                        }
