@@ -36,4 +36,4 @@ public class ShopItem {
         }
         p.openInventory(inv);
     }
-                                                                                }
+}
