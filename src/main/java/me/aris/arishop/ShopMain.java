@@ -13,12 +13,11 @@ import java.util.List;
 public class ShopMain {
     public static void open(Player p) {
         ArisShop m = ArisShop.getInstance();
-        String title = m.color(m.getConfig().getString("main-menu.title"));
-        Inventory inv = Bukkit.createInventory(null, m.getConfig().getInt("main-menu.rows") * 9, title);
+        Inventory inv = Bukkit.createInventory(null, m.getConfig().getInt("main-menu.rows") * 9, m.color(m.getConfig().getString("main-menu.title")));
         ConfigurationSection sec = m.getConfig().getConfigurationSection("main-menu.categories");
         if (sec != null) {
             for (String key : sec.getKeys(false)) {
-                ItemStack item = new ItemStack(Material.valueOf(sec.getString(key + ".material")));
+                ItemStack item = new ItemStack(Material.valueOf(sec.getString(key + ".material").toUpperCase()));
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName(m.color(sec.getString(key + ".displayname")));
                 List<String> lore = new ArrayList<>();
@@ -30,4 +29,4 @@ public class ShopMain {
         }
         p.openInventory(inv);
     }
-}
+                    }
