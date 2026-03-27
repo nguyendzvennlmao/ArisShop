@@ -14,7 +14,9 @@ public class ShopMain {
     public static void open(Player p) {
         ArisShop m = ArisShop.getInstance();
         try {
-            Inventory inv = Bukkit.createInventory(null, m.getConfig().getInt("main-menu.rows") * 9, m.color(m.getConfig().getString("main-menu.title")));
+            int rows = m.getConfig().getInt("main-menu.rows");
+            String title = m.getConfig().getString("main-menu.title");
+            Inventory inv = Bukkit.createInventory(null, rows * 9, m.color(title));
             ConfigurationSection sec = m.getConfig().getConfigurationSection("main-menu.categories");
             if (sec != null) {
                 for (String key : sec.getKeys(false)) {
@@ -34,7 +36,7 @@ public class ShopMain {
             }
             p.openInventory(inv);
         } catch (Exception e) {
-            p.sendMessage("§c[ArisShop] Lỗi Main Menu! Kiểm tra config.yml");
+            p.sendMessage("§c[ArisShop] Lỗi Main Menu! Hãy kiểm tra config.yml");
         }
     }
-                                           }
+                                                   }
