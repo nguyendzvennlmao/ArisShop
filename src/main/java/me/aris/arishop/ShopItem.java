@@ -20,7 +20,7 @@ public class ShopItem {
         try {
             YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
             ConfigurationSection d = c;
-            if (c.getKeys(false).size() == 1 && c.isConfigurationSection(c.getKeys(false).iterator().next()) && !c.contains("items"))
+            if (c.getKeys(false).size() == 1 && !c.contains("items"))
                 d = c.getConfigurationSection(c.getKeys(false).iterator().next());
 
             Inventory inv = Bukkit.createInventory(null, d.getInt("rows", 3) * 9, m.color(d.getString("title")));
@@ -42,4 +42,4 @@ public class ShopItem {
             p.openInventory(inv);
         } catch (Exception e) { p.sendMessage("§c[ArisShop] Lỗi file shop!"); }
     }
-                }
+                    }
