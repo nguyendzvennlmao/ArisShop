@@ -37,31 +37,31 @@ main-menu:
   title: "&8ѕʜᴏᴘ"
   rows: 3
   categories:
-    end:
+    end.yml:
       displayname: "&#0bf592ᴇɴᴅ"
       material: END_STONE
       slot: 11
       lore:
         - "&fClick to view"
-    nether:
+    nether.yml:
       displayname: "&#0bf592ɴᴇᴛʜᴇʀ"
       material: MAGMA_BLOCK
       slot: 12
       lore:
         - "&fClick to view"
-    gear:
+    gear.yml:
       displayname: "&#0bf592ɢᴇᴀʀ"
       material: TOTEM_OF_UNDYING
       slot: 13
       lore:
         - "&fClick to view"
-    food:
+    food.yml:
       displayname: "&#0bf592ꜰᴏᴏᴅ"
       material: COOKED_BEEF
       slot: 14
       lore:
         - "&fClick to view"
-    shards:
+    shards.yml:
       displayname: "&#0bf592sʜᴀʀᴅs"
       material: AMETHYST_SHARD
       slot: 15
