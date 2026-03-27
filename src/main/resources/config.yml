@@ -21,6 +21,12 @@ messages:
     chat: true
     actionbar: false
 
+amount-format:
+  k: "K"
+  m: "M"
+  b: "B"
+  t: "T"
+
 sounds:
   menu-open: "BLOCK_CHEST_OPEN"
   button-click: "UI_BUTTON_CLICK"
@@ -42,33 +48,37 @@ main-menu:
       material: END_STONE
       slot: 11
       lore:
-        - "&fClick to view"
+        - "&fNhấn để mở cửa hàng End"
     nether:
       displayname: "&#0bf592ɴᴇᴛʜᴇʀ"
       material: MAGMA_BLOCK
       slot: 12
       lore:
-        - "&fClick to view"
+        - "&fNhấn để mở cửa hàng Nether"
     gear:
       displayname: "&#0bf592ɢᴇᴀʀ"
       material: TOTEM_OF_UNDYING
       slot: 13
       lore:
-        - "&fClick to view"
+        - "&fNhấn để mở cửa hàng Trang bị"
     food:
       displayname: "&#0bf592ꜰᴏᴏᴅ"
       material: COOKED_BEEF
       slot: 14
       lore:
-        - "&fClick to view"
+        - "&fNhấn để mở cửa hàng Đồ ăn"
     shards:
       displayname: "&#0bf592sʜᴀʀᴅs"
       material: AMETHYST_SHARD
       slot: 15
       lore:
-        - "&fClick to view"
+        - "&fNhấn để mở cửa hàng Shards"
 
 gui:
+  back-button:
+    displayname: "&c« Quay lại Menu chính"
+    material: BARRIER
+    slot: 22
   quantity-selector:
     title: "&8ᴄᴏɴғɪʀᴍ ᴘᴜʀᴄʜᴀsᴇ"
     rows: 3
@@ -76,48 +86,38 @@ gui:
       name: "&#e00202ᴄᴀɴᴄᴇʟ"
       slot: 21
       material: RED_STAINED_GLASS_PANE
-      lore:
-        - "&fClick to cancel"
     confirm:
       name: "&#02de4fᴄᴏɴғɪʀᴍ"
       slot: 23
       material: LIME_STAINED_GLASS_PANE
-      lore:
-        - "&fClick to buy"
     add1:
-      name: "&aAdd 1"
+      name: "&a+1"
       slot: 15
-      stack-change: 1
       material: LIME_STAINED_GLASS_PANE
     add10:
-      name: "&aAdd 10"
+      name: "&a+10"
       slot: 16
-      stack-change: 10
       material: LIME_STAINED_GLASS_PANE
     set64:
-      name: "&aSet to 64"
+      name: "&aĐặt 64"
       slot: 17
-      stack-change: 64
       material: LIME_STAINED_GLASS_PANE
     remove1:
-      name: "&cRemove 1"
+      name: "&c-1"
       slot: 11
-      stack-change: -1
       material: RED_STAINED_GLASS_PANE
     remove10:
-      name: "&cRemove 10"
+      name: "&c-10"
       slot: 10
-      stack-change: -10
       material: RED_STAINED_GLASS_PANE
     remove64:
-      name: "&cRemove 64"
+      name: "&cĐặt 1"
       slot: 9
-      stack-change: -64
       material: RED_STAINED_GLASS_PANE
     item-preview:
       slot: 13
       lore:
-        - "&fPrice per item: &#0bf52b%price%"
-        - "&fCurrent Amount: &e%amount%x"
+        - "&fGiá mỗi món: &#0bf52b%price%"
+        - "&fSố lượng: &e%amount%x"
         - ""
-        - "&fTotal: &#0bf52b%total_price%"
+        - "&fTổng cộng: &#0bf52b%total_price%"
