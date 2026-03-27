@@ -7,8 +7,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class ShopListener implements Listener {
+    private final Map<UUID, ShopContext> sessions = new HashMap<>();
+    public static class ShopContext { String cat, item, name; int amount = 1; double price; }
+
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (e.getClickedInventory() == null || e.getCurrentItem() == null) return;
@@ -42,4 +48,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-}
+                }
