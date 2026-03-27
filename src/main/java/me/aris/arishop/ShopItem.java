@@ -25,16 +25,18 @@ public class ShopItem {
             for (String k : items.getKeys(false)) {
                 ItemStack item = new ItemStack(Material.valueOf(items.getString(k + ".material").toUpperCase()));
                 ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(m.color(items.getString(k + ".displayname")));
-                List<String> lore = new ArrayList<>();
-                for (String s : items.getStringList(k + ".lore")) {
-                    lore.add(m.color(s.replace("%price%", String.valueOf(items.getDouble(k + ".price")))));
+                if (meta != null) {
+                    meta.setDisplayName(m.color(items.getString(k + ".displayname")));
+                    List<String> lore = new ArrayList<>();
+                    for (String s : items.getStringList(k + ".lore")) {
+                        lore.add(m.color(s.replace("%price%", String.valueOf(items.getDouble(k + ".price")))));
+                    }
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
                 }
-                meta.setLore(lore);
-                item.setItemMeta(meta);
                 inv.setItem(items.getInt(k + ".slot"), item);
             }
         }
         p.openInventory(inv);
     }
-}
+            }
