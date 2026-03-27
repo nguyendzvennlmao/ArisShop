@@ -59,4 +59,4 @@ public class ConfirmPurchase {
         item.setItemMeta(meta);
         inv.setItem(b.getInt("slot"), item);
     }
-            }
+                     }
