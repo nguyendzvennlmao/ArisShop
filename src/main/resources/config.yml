@@ -34,7 +34,7 @@ currencies:
     take-command: "shards take %player% %price%"
 
 main-menu:
-  title: "&8ѕʜᴏᴘ"
+  title: "&8sʜᴏᴘ"
   rows: 3
   categories:
     end:
@@ -85,32 +85,32 @@ gui:
       lore:
         - "&fClick to buy"
     add1:
-      name: "&aAdd %amount%"
+      name: "&aAdd 1"
       slot: 15
       stack-change: 1
       material: LIME_STAINED_GLASS_PANE
     add10:
-      name: "&aAdd %amount%"
+      name: "&aAdd 10"
       slot: 16
       stack-change: 10
       material: LIME_STAINED_GLASS_PANE
     set64:
-      name: "&aSet to %amount%"
+      name: "&aSet to 64"
       slot: 17
       stack-change: 64
       material: LIME_STAINED_GLASS_PANE
     remove1:
-      name: "&cRemove %amount%"
+      name: "&cRemove 1"
       slot: 11
       stack-change: -1
       material: RED_STAINED_GLASS_PANE
     remove10:
-      name: "&cRemove %amount%"
+      name: "&cRemove 10"
       slot: 10
       stack-change: -10
       material: RED_STAINED_GLASS_PANE
     remove64:
-      name: "&cRemove %amount%"
+      name: "&cRemove 64"
       slot: 9
       stack-change: -64
       material: RED_STAINED_GLASS_PANE
