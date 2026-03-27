@@ -23,6 +23,11 @@ public class ArisShop extends JavaPlugin {
         File shopFolder = new File(getDataFolder(), "shop");
         if (!shopFolder.exists()) {
             shopFolder.mkdirs();
+            saveResource("shop/food.yml", false);
+            saveResource("shop/gear.yml", false);
+            saveResource("shop/end.yml", false);
+            saveResource("shop/nether.yml", false);
+            saveResource("shop/shards.yml", false);
         }
         
         setupEconomy();
@@ -55,4 +60,4 @@ public class ArisShop extends JavaPlugin {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-}
+                }
