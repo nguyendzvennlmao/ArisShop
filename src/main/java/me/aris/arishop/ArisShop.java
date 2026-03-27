@@ -19,8 +19,7 @@ public class ArisShop extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        File folder = new File(getDataFolder(), "shop");
-        if (!folder.exists()) folder.mkdirs();
+        if (!new File(getDataFolder(), "shop").exists()) new File(getDataFolder(), "shop").mkdirs();
         setupEconomy();
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
     }
