@@ -18,21 +18,16 @@ public class ShopMain {
         ConfigurationSection sec = m.getConfig().getConfigurationSection("main-menu.categories");
         if (sec != null) {
             for (String key : sec.getKeys(false)) {
-                inv.setItem(sec.getInt(key + ".slot"), create(Material.valueOf(sec.getString(key + ".material")), m.color(sec.getString(key + ".displayname")), sec.getStringList(key + ".lore")));
+                ItemStack item = new ItemStack(Material.valueOf(sec.getString(key + ".material")));
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(m.color(sec.getString(key + ".displayname")));
+                List<String> lore = new ArrayList<>();
+                for (String s : sec.getStringList(key + ".lore")) lore.add(m.color(s));
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+                inv.setItem(sec.getInt(key + ".slot"), item);
             }
         }
-        m.playSound(p, "menu-open");
         p.openInventory(inv);
     }
-
-    public static ItemStack create(Material m, String n, List<String> l) {
-        ItemStack i = new ItemStack(m);
-        ItemMeta mt = i.getItemMeta();
-        mt.setDisplayName(n);
-        List<String> cl = new ArrayList<>();
-        for (String s : l) cl.add(ArisShop.getInstance().color(s));
-        mt.setLore(cl);
-        i.setItemMeta(mt);
-        return i;
-    }
-    }
+}
