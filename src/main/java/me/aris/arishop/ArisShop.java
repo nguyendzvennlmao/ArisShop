@@ -4,10 +4,12 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,17 +21,11 @@ public class ArisShop extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        
         File shopFolder = new File(getDataFolder(), "shop");
         if (!shopFolder.exists()) {
             shopFolder.mkdirs();
             saveResource("shop/food.yml", false);
-            saveResource("shop/gear.yml", false);
-            saveResource("shop/end.yml", false);
-            saveResource("shop/nether.yml", false);
-            saveResource("shop/shards.yml", false);
         }
-        
         setupEconomy();
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
     }
@@ -55,9 +51,28 @@ public class ArisShop extends JavaPlugin {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
+    public String format(double n) {
+        if (n < 1000) return String.valueOf((int)n);
+        ConfigurationSection f = getConfig().getConfigurationSection("amount-format");
+        String[] units = {"", f.getString("k"), f.getString("m"), f.getString("b"), f.getString("t")};
+        int exp = (int) (Math.log10(n) / 3);
+        return new DecimalFormat("#.#").format(n / Math.pow(10, exp * 3)) + units[exp];
+    }
+
+    public void sendMsg(Player p, String path, String... replace) {
+        ConfigurationSection sec = getConfig().getConfigurationSection("messages." + path);
+        if (sec == null) return;
+        String prefix = color(getConfig().getString("messages.prefix", ""));
+        String text = sec.getString("text", "");
+        for (int i = 0; i < replace.length; i += 2) text = text.replace(replace[i], replace[i+1]);
+        String finalMsg = prefix + color(text);
+        if (sec.getBoolean("chat")) p.sendMessage(finalMsg);
+        if (sec.getBoolean("actionbar")) p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(finalMsg));
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-                }
+                                                                }
