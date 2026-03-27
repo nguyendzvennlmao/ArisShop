@@ -6,6 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
@@ -13,10 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuiManager {
+    public static class MainMenuHolder implements InventoryHolder { @Override public Inventory getInventory() { return null; } }
+    public static class CategoryHolder implements InventoryHolder { 
+        public String id; 
+        public CategoryHolder(String id) { this.id = id; }
+        @Override public Inventory getInventory() { return null; } 
+    }
+    public static class ConfirmHolder implements InventoryHolder { @Override public Inventory getInventory() { return null; } }
 
     public static void openMainMenu(Player p) {
         ArisShop main = ArisShop.getInstance();
-        Inventory inv = Bukkit.createInventory(null, main.getConfig().getInt("main-menu.rows") * 9, main.color(main.getConfig().getString("main-menu.title")));
+        Inventory inv = Bukkit.createInventory(new MainMenuHolder(), main.getConfig().getInt("main-menu.rows") * 9, main.color(main.getConfig().getString("main-menu.title")));
         ConfigurationSection sec = main.getConfig().getConfigurationSection("main-menu.categories");
         if (sec != null) {
             for (String key : sec.getKeys(false)) {
@@ -32,7 +40,7 @@ public class GuiManager {
         File f = new File(main.getDataFolder() + "/shop", catId + ".yml");
         if (!f.exists()) return;
         YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
-        Inventory inv = Bukkit.createInventory(null, config.getInt("rows") * 9, main.color(config.getString("title")));
+        Inventory inv = Bukkit.createInventory(new CategoryHolder(catId), config.getInt("rows") * 9, main.color(config.getString("title")));
         ConfigurationSection items = config.getConfigurationSection("items");
         if (items != null) {
             for (String key : items.getKeys(false)) {
@@ -46,7 +54,7 @@ public class GuiManager {
 
     public static void openConfirm(Player p, ShopListener.ShopContext ctx) {
         ArisShop main = ArisShop.getInstance();
-        Inventory inv = Bukkit.createInventory(null, main.getConfig().getInt("gui.quantity-selector.rows") * 9, main.color(main.getConfig().getString("gui.quantity-selector.title")));
+        Inventory inv = Bukkit.createInventory(new ConfirmHolder(), main.getConfig().getInt("gui.quantity-selector.rows") * 9, main.color(main.getConfig().getString("gui.quantity-selector.title")));
         refreshConfirm(inv, ctx);
         p.openInventory(inv);
     }
@@ -82,4 +90,4 @@ public class GuiManager {
         }
         return i;
     }
-  }
+                                                                      }
