@@ -25,7 +25,10 @@ public class ShopListener implements Listener {
             p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
             ConfigurationSection sec = m.getConfig().getConfigurationSection("main-menu.categories");
             for (String key : sec.getKeys(false)) {
-                if (e.getSlot() == sec.getInt(key + ".slot")) { ShopItem.open(p, key); return; }
+                if (e.getSlot() == sec.getInt(key + ".slot")) {
+                    ShopItem.open(p, key);
+                    return;
+                }
             }
         }
 
@@ -94,23 +97,22 @@ public class ShopListener implements Listener {
             return;
         }
 
-        handleShopClick(p, title, e.getSlot(), e.getCurrentItem());
+        handleShopClick(p, title, e.getSlot(), e.getCurrentItem(), e);
     }
 
-    private void handleShopClick(Player p, String title, int slot, ItemStack clickedItem) {
+    private void handleShopClick(Player p, String title, int slot, ItemStack clickedItem, InventoryClickEvent event) {
         ArisShop m = ArisShop.getInstance();
         File folder = new File(m.getDataFolder(), "shop");
         if (!folder.exists()) return;
         for (File f : folder.listFiles()) {
             YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
-            ConfigurationSection d = c;
-            if (c.getKeys(false).size() == 1 && !c.contains("items")) d = c.getConfigurationSection(c.getKeys(false).iterator().next());
-            if (title.equals(m.color(d.getString("title")))) {
-                e.setCancelled(true);
-                ConfigurationSection items = d.getConfigurationSection("items");
+            if (title.equals(m.color(c.getString("title")))) {
+                event.setCancelled(true);
+                ConfigurationSection items = c.getConfigurationSection("items");
+                if (items == null) return;
                 for (String k : items.getKeys(false)) {
                     if (slot == items.getInt(k + ".slot")) {
-                        p.setMetadata("aris_currency", new FixedMetadataValue(m, d.getString("currency", "MONEY")));
+                        p.setMetadata("aris_currency", new FixedMetadataValue(m, c.getString("currency", "MONEY")));
                         p.setMetadata("aris_command", new FixedMetadataValue(m, items.getString(k + ".command", "")));
                         p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
                         ConfirmPurchase.open(p, items.getDouble(k + ".price"), clickedItem, 1);
@@ -120,4 +122,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-                }
+                                 }
