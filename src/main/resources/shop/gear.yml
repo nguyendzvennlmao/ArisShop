@@ -1,76 +1,59 @@
-gear:
-    title: "&8sʜᴏᴘ - ɢᴇᴀʀ"
-    rows: 3
-    items:
-      obsidian:
-        slot: 9
-        material: OBSIDIAN
-        displayname: "&fObsidian"
-        price: 100
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      end-crystal:
-        slot: 10
-        material: END_CRYSTAL
-        displayname: "&fEnd Crystal"
-        price: 350
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      respawn_anchor:
-        slot: 11
-        material: RESPAWN_ANCHOR
-        displayname: "&fRespawn Anchor"
-        price: 1000
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      glowstone:
-        slot: 12
-        material: GLOWSTONE
-        displayname: "&fGlowstone"
-        price: 100
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      totem-of-unfying:
-        slot: 13
-        material: TOTEM_OF_UNDYING
-        displayname: "&f&eTotem of Undying"
-        price: 1250
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      gear-ender-pearl:
-        slot: 14
-        material: ENDER_PEARL
-        displayname: "&fEnder Pearl"
-        price: 75
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      golden-apple:
-        slot: 15
-        material: GOLDEN_APPLE
-        displayname: "&f&bGolden Apple"
-        price: 250
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      bottle-enchanting:
-        slot: 16
-        material: EXPERIENCE_BOTTLE
-        displayname: "&f&eBottle o' Enchanting"
-        price: 100
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
-      arrow:
-        slot: 17
-        material: ARROW
-        displayname: "&fArrow"
-        price: 500
-        amount: 1
-        lore:
-          - "&fBuy Price: &#0bf52b%price%"
+title: "&8sʜᴏᴘ - ɢᴇᴀʀ"
+rows: 3
+items:
+  obsidian:
+    slot: 9
+    material: OBSIDIAN
+    displayname: "&fObsidian"
+    price: 100
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  end-crystal:
+    slot: 10
+    material: END_CRYSTAL
+    displayname: "&fEnd Crystal"
+    price: 350
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  respawn_anchor:
+    slot: 11
+    material: RESPAWN_ANCHOR
+    displayname: "&fRespawn Anchor"
+    price: 1000
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  glowstone:
+    slot: 12
+    material: GLOWSTONE
+    displayname: "&fGlowstone"
+    price: 100
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  totem-of-unfying:
+    slot: 13
+    material: TOTEM_OF_UNDYING
+    displayname: "&f&eTotem of Undying"
+    price: 1250
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  gear-ender-pearl:
+    slot: 14
+    material: ENDER_PEARL
+    displayname: "&fEnder Pearl"
+    price: 75
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  golden-apple:
+    slot: 15
+    material: GOLDEN_APPLE
+    displayname: "&f&bGolden Apple"
+    price: 250
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
