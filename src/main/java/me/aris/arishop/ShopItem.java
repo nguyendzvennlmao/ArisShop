@@ -19,30 +19,30 @@ public class ShopItem {
         if (!f.exists()) return;
         YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
         Inventory inv = Bukkit.createInventory(null, c.getInt("rows", 3) * 9, m.color(c.getString("title")));
-        
         ConfigurationSection items = c.getConfigurationSection("items");
         if (items != null) {
             for (String k : items.getKeys(false)) {
                 ItemStack item = new ItemStack(Material.valueOf(items.getString(k + ".material")));
                 ItemMeta meta = item.getItemMeta();
-                meta.setDisplayName(m.color(items.getString(k + ".displayname")));
-                List<String> lore = new ArrayList<>();
-                String priceStr = m.format(items.getDouble(k + ".price"));
-                for (String s : items.getStringList(k + ".lore")) lore.add(m.color(s.replace("%price%", priceStr)));
-                meta.setLore(lore);
-                item.setItemMeta(meta);
+                if (meta != null) {
+                    meta.setDisplayName(m.color(items.getString(k + ".displayname")));
+                    List<String> lore = new ArrayList<>();
+                    String priceStr = m.format(items.getDouble(k + ".price"));
+                    for (String s : items.getStringList(k + ".lore")) lore.add(m.color(s.replace("%price%", priceStr)));
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                }
                 inv.setItem(items.getInt(k + ".slot"), item);
             }
         }
-
-        ConfigurationSection backCfg = m.getConfig().getConfigurationSection("gui.back-button");
-        if (backCfg != null) {
-            ItemStack back = new ItemStack(Material.valueOf(backCfg.getString("material", "BARRIER")));
-            ItemMeta bMeta = back.getItemMeta();
-            bMeta.setDisplayName(m.color(backCfg.getString("displayname")));
-            back.setItemMeta(bMeta);
-            inv.setItem(backCfg.getInt("slot", 22), back);
+        ConfigurationSection back = m.getConfig().getConfigurationSection("gui.back-button");
+        if (back != null) {
+            ItemStack backItem = new ItemStack(Material.valueOf(back.getString("material")));
+            ItemMeta bMeta = backItem.getItemMeta();
+            if (bMeta != null) bMeta.setDisplayName(m.color(back.getString("displayname")));
+            backItem.setItemMeta(bMeta);
+            inv.setItem(back.getInt("slot"), backItem);
         }
         p.openInventory(inv);
     }
-            }
+}
