@@ -11,6 +11,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,20 +30,33 @@ public class ArisShop extends JavaPlugin {
         } catch (ClassNotFoundException e) {
             isFolia = false;
         }
+        if (!setupEconomy()) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         saveDefaultConfig();
+        
         File shopFolder = new File(getDataFolder(), "shop");
         if (!shopFolder.exists()) {
             shopFolder.mkdirs();
-            saveResource("shop/food.yml", false);
+            List<String> defaultShops = Arrays.asList("gear.yml", "shards.yml", "end.yml", "nether.yml", "food.yml");
+            for (String fileName : defaultShops) {
+                File file = new File(shopFolder, fileName);
+                if (!file.exists()) {
+                    saveResource("shop/" + fileName, false);
+                }
+            }
         }
-        setupEconomy();
+        
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
     }
 
-    private void setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) return;
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp != null) econ = rsp.getProvider();
+        if (rsp == null) return false;
+        econ = rsp.getProvider();
+        return econ != null;
     }
 
     public static ArisShop getInstance() { return instance; }
@@ -53,7 +68,7 @@ public class ArisShop extends JavaPlugin {
         Matcher matcher = pattern.matcher(msg);
         while (matcher.find()) {
             String color = msg.substring(matcher.start(), matcher.end());
-            msg = msg.replace(color, net.md_5.bungee.api.ChatColor.of(color.substring(1)).toString());
+            msg = msg.replace(color, net.md_5.api.ChatColor.of(color.substring(1)).toString());
             matcher = pattern.matcher(msg);
         }
         return ChatColor.translateAlternateColorCodes('&', msg);
@@ -75,7 +90,7 @@ public class ArisShop extends JavaPlugin {
         for (int i = 0; i < replace.length; i += 2) text = text.replace(replace[i], replace[i+1]);
         String finalMsg = prefix + color(text);
         if (sec.getBoolean("chat")) p.sendMessage(finalMsg);
-        if (sec.getBoolean("actionbar")) p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(finalMsg));
+        if (sec.getBoolean("actionbar")) p.spigot().sendMessage(net.md_5.api.ChatMessageType.ACTION_BAR, new net.md_5.api.chat.TextComponent(finalMsg));
     }
 
     public void runTask(Player p, Runnable r) {
@@ -88,4 +103,4 @@ public class ArisShop extends JavaPlugin {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-  }
+                                                                                                }
