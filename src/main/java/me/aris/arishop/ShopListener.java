@@ -52,7 +52,7 @@ public class ShopListener implements Listener {
                         bal = Integer.parseInt(raw.replaceAll("[^0-9]", ""));
                     } catch (Exception ex) { bal = 0; }
                     if (bal >= total) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)total)));
+                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)total))));
                         can = true;
                     } else {
                         m.sendMsg(p, "insufficient-shards");
@@ -68,7 +68,7 @@ public class ShopListener implements Listener {
                     }
                 }
                 if (can) {
-                    if (!cmd.isEmpty()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", p.getName()).replace("%amount%", String.valueOf(amount)));
+                    if (!cmd.isEmpty()) m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", p.getName()).replace("%amount%", String.valueOf(amount))));
                     else {
                         if (p.getInventory().firstEmpty() == -1) {
                             m.sendMsg(p, "full-inventory");
@@ -102,30 +102,30 @@ public class ShopListener implements Listener {
         }
 
         File folder = new File(m.getDataFolder(), "shop");
-        if (!folder.exists()) return;
-        for (File f : folder.listFiles()) {
-            YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
-            if (title.equals(m.color(c.getString("title")))) {
-                e.setCancelled(true);
-                int backSlot = m.getConfig().getInt("gui.back-button.slot", 22);
-                if (e.getSlot() == backSlot) {
-                    p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
-                    ShopMain.open(p);
-                    return;
-                }
-                ConfigurationSection items = c.getConfigurationSection("items");
-                if (items == null) return;
-                for (String k : items.getKeys(false)) {
-                    if (e.getSlot() == items.getInt(k + ".slot")) {
-                        p.setMetadata("aris_curr", new FixedMetadataValue(m, c.getString("currency", "MONEY")));
-                        p.setMetadata("aris_cmd", new FixedMetadataValue(m, items.getString(k + ".command", "")));
-                        p.setMetadata("aris_file", new FixedMetadataValue(m, f.getName()));
+        if (folder.exists() && folder.listFiles() != null) {
+            for (File f : folder.listFiles()) {
+                YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
+                if (title.equals(m.color(c.getString("title")))) {
+                    e.setCancelled(true);
+                    if (e.getSlot() == m.getConfig().getInt("gui.back-button.slot", 22)) {
                         p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
-                        ConfirmPurchase.open(p, items.getDouble(k + ".price"), e.getCurrentItem(), 1);
+                        ShopMain.open(p);
                         return;
+                    }
+                    ConfigurationSection items = c.getConfigurationSection("items");
+                    if (items == null) return;
+                    for (String k : items.getKeys(false)) {
+                        if (e.getSlot() == items.getInt(k + ".slot")) {
+                            p.setMetadata("aris_curr", new FixedMetadataValue(m, c.getString("currency", "MONEY")));
+                            p.setMetadata("aris_cmd", new FixedMetadataValue(m, items.getString(k + ".command", "")));
+                            p.setMetadata("aris_file", new FixedMetadataValue(m, f.getName()));
+                            p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
+                            ConfirmPurchase.open(p, items.getDouble(k + ".price"), e.getCurrentItem(), 1);
+                            return;
+                        }
                     }
                 }
             }
         }
     }
-}
+            }
