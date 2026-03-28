@@ -40,22 +40,22 @@ public class ShopListener implements Listener {
             int maxStack = p.getMetadata("aris_stack").get(0).asInt();
             ItemStack itemObj = (ItemStack) p.getMetadata("aris_item").get(0).value();
             String curr = p.hasMetadata("aris_curr") ? p.getMetadata("aris_curr").get(0).asString() : "MONEY";
-            String cmd = p.hasMetadata("aris_cmd") ? p.getMetadata("aris_cmd").get(0).asString() : "";
             String file = p.hasMetadata("aris_file") ? p.getMetadata("aris_file").get(0).asString() : "";
 
             if (e.getSlot() == gui.getInt("confirm.slot")) {
                 final double finalTotal = price * amount;
-                final String finalCmd = cmd;
                 final int finalAmount = amount;
                 final ItemStack finalItemObj = itemObj;
+                final String finalCurr = curr;
 
                 boolean can = false;
-                if (curr.equalsIgnoreCase("SHARDS")) {
+                if (finalCurr.equalsIgnoreCase("SHARDS")) {
                     int bal = 0;
                     try {
                         String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, m.getConfig().getString("currencies.shards.balance-placeholder"));
                         bal = Integer.parseInt(raw.replaceAll("[^0-9]", ""));
                     } catch (Exception ex) { bal = 0; }
+                    
                     if (bal >= finalTotal) {
                         m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)finalTotal))));
                         can = true;
@@ -72,18 +72,16 @@ public class ShopListener implements Listener {
                         p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
                     }
                 }
+
                 if (can) {
-                    if (!finalCmd.isEmpty()) m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd.replace("%player%", p.getName()).replace("%amount%", String.valueOf(finalAmount))));
-                    else {
-                        if (p.getInventory().firstEmpty() == -1) {
-                            m.sendMsg(p, "full-inventory");
-                            p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
-                            return;
-                        }
-                        ItemStack finalI = finalItemObj.clone();
-                        finalI.setAmount(finalAmount);
-                        p.getInventory().addItem(finalI);
+                    if (p.getInventory().firstEmpty() == -1) {
+                        m.sendMsg(p, "full-inventory");
+                        p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
+                        return;
                     }
+                    ItemStack finalI = finalItemObj.clone();
+                    finalI.setAmount(finalAmount);
+                    p.getInventory().addItem(finalI);
                     m.sendMsg(p, "buy-success", "%amount%", String.valueOf(finalAmount), "%item%", finalItemObj.getItemMeta().getDisplayName());
                     p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-success")), 1, 1);
                 }
@@ -111,6 +109,7 @@ public class ShopListener implements Listener {
         File folder = new File(m.getDataFolder(), "shop");
         if (folder.exists() && folder.listFiles() != null) {
             for (File f : folder.listFiles()) {
+                if (f == null || !f.getName().endsWith(".yml")) continue;
                 YamlConfiguration c = YamlConfiguration.loadConfiguration(f);
                 if (title.equals(m.color(c.getString("title")))) {
                     e.setCancelled(true);
@@ -124,7 +123,6 @@ public class ShopListener implements Listener {
                     for (String k : items.getKeys(false)) {
                         if (e.getSlot() == items.getInt(k + ".slot")) {
                             p.setMetadata("aris_curr", new FixedMetadataValue(m, c.getString("currency", "MONEY")));
-                            p.setMetadata("aris_cmd", new FixedMetadataValue(m, items.getString(k + ".command", "")));
                             p.setMetadata("aris_file", new FixedMetadataValue(m, f.getName().replace(".yml", "")));
                             p.setMetadata("aris_stack", new FixedMetadataValue(m, items.getInt(k + ".stack", 64)));
                             p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
@@ -136,4 +134,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-                }
+                                }
