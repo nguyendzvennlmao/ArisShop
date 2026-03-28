@@ -15,29 +15,22 @@ public class ShopMain {
         ArisShop m = ArisShop.getInstance();
         ConfigurationSection menu = m.getConfig().getConfigurationSection("main-menu");
         if (menu == null) return;
-
         Inventory inv = Bukkit.createInventory(null, menu.getInt("rows", 3) * 9, m.color(menu.getString("title")));
         ConfigurationSection cats = menu.getConfigurationSection("categories");
-        
         if (cats != null) {
             for (String k : cats.getKeys(false)) {
-                String matName = cats.getString(k + ".material", "STONE");
-                ItemStack item = new ItemStack(Material.valueOf(matName));
+                ItemStack item = new ItemStack(Material.valueOf(cats.getString(k + ".material")));
                 ItemMeta meta = item.getItemMeta();
-                
                 if (meta != null) {
                     meta.setDisplayName(m.color(cats.getString(k + ".displayname")));
                     List<String> lore = new ArrayList<>();
-                    for (String s : cats.getStringList(k + ".lore")) {
-                        lore.add(m.color(s));
-                    }
+                    for (String s : cats.getStringList(k + ".lore")) lore.add(m.color(s));
                     meta.setLore(lore);
                     item.setItemMeta(meta);
                 }
                 inv.setItem(cats.getInt(k + ".slot"), item);
             }
         }
-        
         p.openInventory(inv);
     }
-            }
+                }
