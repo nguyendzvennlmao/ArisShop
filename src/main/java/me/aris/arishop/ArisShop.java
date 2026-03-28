@@ -68,7 +68,7 @@ public class ArisShop extends JavaPlugin {
         Matcher matcher = pattern.matcher(msg);
         while (matcher.find()) {
             String color = msg.substring(matcher.start(), matcher.end());
-            msg = msg.replace(color, net.md_5.api.ChatColor.of(color.substring(1)).toString());
+            msg = msg.replace(color, net.md_5.bungee.api.ChatColor.of(color.substring(1)).toString());
             matcher = pattern.matcher(msg);
         }
         return ChatColor.translateAlternateColorCodes('&', msg);
@@ -90,7 +90,7 @@ public class ArisShop extends JavaPlugin {
         for (int i = 0; i < replace.length; i += 2) text = text.replace(replace[i], replace[i+1]);
         String finalMsg = prefix + color(text);
         if (sec.getBoolean("chat")) p.sendMessage(finalMsg);
-        if (sec.getBoolean("actionbar")) p.spigot().sendMessage(net.md_5.api.ChatMessageType.ACTION_BAR, new net.md_5.api.chat.TextComponent(finalMsg));
+        if (sec.getBoolean("actionbar")) p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(finalMsg));
     }
 
     public void runTask(Player p, Runnable r) {
@@ -103,4 +103,4 @@ public class ArisShop extends JavaPlugin {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-                          }
+                }
