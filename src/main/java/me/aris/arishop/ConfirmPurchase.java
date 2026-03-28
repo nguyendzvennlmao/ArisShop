@@ -12,13 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfirmPurchase {
-    public static void open(Player p, double price, ItemStack shopItem, int amount) {
+    public static void open(Player p, double price, ItemStack shopItem, int amount, int maxStack) {
         ArisShop m = ArisShop.getInstance();
         ConfigurationSection gui = m.getConfig().getConfigurationSection("gui.quantity-selector");
         Inventory inv = Bukkit.createInventory(null, gui.getInt("rows", 3) * 9, m.color(gui.getString("title")));
+        
         p.setMetadata("aris_price", new FixedMetadataValue(m, price));
         p.setMetadata("aris_amount", new FixedMetadataValue(m, amount));
         p.setMetadata("aris_item", new FixedMetadataValue(m, shopItem));
+        p.setMetadata("aris_stack", new FixedMetadataValue(m, maxStack));
+        
         String[] buttons = {"confirm", "cancel", "add1", "add10", "set64", "remove1", "remove10", "remove64"};
         for (String b : buttons) {
             ConfigurationSection sec = gui.getConfigurationSection(b);
@@ -30,12 +33,15 @@ public class ConfirmPurchase {
                 inv.setItem(sec.getInt("slot"), item);
             }
         }
+
         ItemStack preview = shopItem.clone();
+        preview.setAmount(amount);
         ItemMeta pMeta = preview.getItemMeta();
         if (pMeta != null) {
             List<String> lore = new ArrayList<>();
             for (String s : gui.getStringList("item-preview.lore")) {
-                lore.add(m.color(s.replace("%price%", m.format(price)).replace("%amount%", String.valueOf(amount)).replace("%total_price%", m.format(price * amount))));
+                lore.add(m.color(s.replace("%amount%", String.valueOf(amount))
+                                 .replace("%total_price%", m.format(price * amount))));
             }
             pMeta.setLore(lore);
             preview.setItemMeta(pMeta);
@@ -43,4 +49,4 @@ public class ConfirmPurchase {
         inv.setItem(gui.getInt("item-preview.slot"), preview);
         p.openInventory(inv);
     }
-                                                                }
+    }
