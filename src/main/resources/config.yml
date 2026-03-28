@@ -43,36 +43,36 @@ main-menu:
   title: "&8sʜᴏᴘ"
   rows: 3
   categories:
-    end:
-      displayname: "&#0bf592ᴇɴᴅ"
-      material: END_STONE
+    gear:
+      displayname: "&#fbbf24ɢᴇᴀʀ"
+      material: DIAMOND_SWORD
+      slot: 10
+      lore:
+        - "&fMua sắm trang bị và vũ khí"
+    shards:
+      displayname: "&#fbbf24sʜᴀʀᴅs"
+      material: AMETHYST_SHARD
       slot: 11
       lore:
-        - "&fNhấn để mở cửa hàng End"
-    nether:
-      displayname: "&#0bf592ɴᴇᴛʜᴇʀ"
-      material: MAGMA_BLOCK
-      slot: 12
-      lore:
-        - "&fNhấn để mở cửa hàng Nether"
-    gear:
-      displayname: "&#0bf592ɢᴇᴀʀ"
-      material: TOTEM_OF_UNDYING
+        - "&fCửa hàng đổi vật phẩm bằng Shards"
+    food:
+      displayname: "&#fbbf24ꜰᴏᴏᴅ"
+      material: COOKED_BEEF
       slot: 13
       lore:
-        - "&fNhấn để mở cửa hàng Trang bị"
-    food:
-      displayname: "&#0bf592ꜰᴏᴏᴅ"
-      material: COOKED_BEEF
-      slot: 14
-      lore:
-        - "&fNhấn để mở cửa hàng Đồ ăn"
-    shards:
-      displayname: "&#0bf592sʜᴀʀᴅs"
-      material: AMETHYST_SHARD
+        - "&fMua các loại thức ăn"
+    nether:
+      displayname: "&#fbbf24ɴᴇᴛʜᴇʀ"
+      material: NETHERRACK
       slot: 15
       lore:
-        - "&fNhấn để mở cửa hàng Shards"
+        - "&fVật phẩm từ địa ngục"
+    end:
+      displayname: "&#fbbf24ᴇɴᴅ"
+      material: END_STONE
+      slot: 16
+      lore:
+        - "&fVật phẩm từ The End"
 
 gui:
   back-button:
