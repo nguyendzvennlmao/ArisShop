@@ -44,6 +44,11 @@ public class ShopListener implements Listener {
 
             if (e.getSlot() == gui.getInt("confirm.slot")) {
                 double total = price * amount;
+                final double finalTotal = total;
+                final String finalCmd = cmd;
+                final int finalAmount = amount;
+                final ItemStack finalItemObj = itemObj;
+
                 boolean can = false;
                 if (curr.equalsIgnoreCase("SHARDS")) {
                     int bal = 0;
@@ -52,7 +57,7 @@ public class ShopListener implements Listener {
                         bal = Integer.parseInt(raw.replaceAll("[^0-9]", ""));
                     } catch (Exception ex) { bal = 0; }
                     if (bal >= total) {
-                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)total))));
+                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)finalTotal))));
                         can = true;
                     } else {
                         m.sendMsg(p, "insufficient-shards");
@@ -68,17 +73,17 @@ public class ShopListener implements Listener {
                     }
                 }
                 if (can) {
-                    if (!cmd.isEmpty()) m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", p.getName()).replace("%amount%", String.valueOf(amount))));
+                    if (!finalCmd.isEmpty()) m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd.replace("%player%", p.getName()).replace("%amount%", String.valueOf(finalAmount))));
                     else {
                         if (p.getInventory().firstEmpty() == -1) {
                             m.sendMsg(p, "full-inventory");
                             p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
                             return;
                         }
-                        ItemStack finalI = itemObj.clone(); finalI.setAmount(amount);
+                        ItemStack finalI = finalItemObj.clone(); finalI.setAmount(finalAmount);
                         p.getInventory().addItem(finalI);
                     }
-                    m.sendMsg(p, "buy-success", "%amount%", String.valueOf(amount), "%item%", itemObj.getItemMeta().getDisplayName());
+                    m.sendMsg(p, "buy-success", "%amount%", String.valueOf(finalAmount), "%item%", finalItemObj.getItemMeta().getDisplayName());
                     p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-success")), 1, 1);
                 }
             } else if (e.getSlot() == gui.getInt("cancel.slot")) {
@@ -128,4 +133,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-          }
+                                                                                       }
