@@ -37,14 +37,14 @@ public class ShopListener implements Listener {
             e.setCancelled(true);
             double price = p.getMetadata("aris_price").get(0).asDouble();
             int amount = p.getMetadata("aris_amount").get(0).asInt();
+            int maxStack = p.getMetadata("aris_stack").get(0).asInt();
             ItemStack itemObj = (ItemStack) p.getMetadata("aris_item").get(0).value();
             String curr = p.hasMetadata("aris_curr") ? p.getMetadata("aris_curr").get(0).asString() : "MONEY";
             String cmd = p.hasMetadata("aris_cmd") ? p.getMetadata("aris_cmd").get(0).asString() : "";
             String file = p.hasMetadata("aris_file") ? p.getMetadata("aris_file").get(0).asString() : "";
 
             if (e.getSlot() == gui.getInt("confirm.slot")) {
-                double total = price * amount;
-                final double finalTotal = total;
+                final double finalTotal = price * amount;
                 final String finalCmd = cmd;
                 final int finalAmount = amount;
                 final ItemStack finalItemObj = itemObj;
@@ -56,7 +56,7 @@ public class ShopListener implements Listener {
                         String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, m.getConfig().getString("currencies.shards.balance-placeholder"));
                         bal = Integer.parseInt(raw.replaceAll("[^0-9]", ""));
                     } catch (Exception ex) { bal = 0; }
-                    if (bal >= total) {
+                    if (bal >= finalTotal) {
                         m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)finalTotal))));
                         can = true;
                     } else {
@@ -64,8 +64,8 @@ public class ShopListener implements Listener {
                         p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
                     }
                 } else {
-                    if (ArisShop.getEconomy().getBalance(p) >= total) {
-                        ArisShop.getEconomy().withdrawPlayer(p, total);
+                    if (ArisShop.getEconomy().getBalance(p) >= finalTotal) {
+                        ArisShop.getEconomy().withdrawPlayer(p, finalTotal);
                         can = true;
                     } else {
                         m.sendMsg(p, "insufficient-funds");
@@ -80,7 +80,8 @@ public class ShopListener implements Listener {
                             p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
                             return;
                         }
-                        ItemStack finalI = finalItemObj.clone(); finalI.setAmount(finalAmount);
+                        ItemStack finalI = finalItemObj.clone();
+                        finalI.setAmount(finalAmount);
                         p.getInventory().addItem(finalI);
                     }
                     m.sendMsg(p, "buy-success", "%amount%", String.valueOf(finalAmount), "%item%", finalItemObj.getItemMeta().getDisplayName());
@@ -93,14 +94,15 @@ public class ShopListener implements Listener {
                 int add = 0;
                 if (e.getSlot() == gui.getInt("add1.slot")) add = 1;
                 else if (e.getSlot() == gui.getInt("add10.slot")) add = 10;
-                else if (e.getSlot() == gui.getInt("set64.slot")) { amount = 64; add = 0; }
+                else if (e.getSlot() == gui.getInt("set64.slot")) { amount = maxStack; add = 0; }
                 else if (e.getSlot() == gui.getInt("remove1.slot")) add = -1;
                 else if (e.getSlot() == gui.getInt("remove10.slot")) add = -10;
                 else if (e.getSlot() == gui.getInt("remove64.slot")) { amount = 1; add = 0; }
-                int newA = Math.min(64, Math.max(1, amount + add));
+                
+                int newA = Math.min(maxStack, Math.max(1, amount + add));
                 if (newA != amount || e.getSlot() == gui.getInt("set64.slot") || e.getSlot() == gui.getInt("remove64.slot")) {
                     p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
-                    ConfirmPurchase.open(p, price, itemObj, newA);
+                    ConfirmPurchase.open(p, price, itemObj, newA, maxStack);
                 }
             }
             return;
@@ -123,9 +125,10 @@ public class ShopListener implements Listener {
                         if (e.getSlot() == items.getInt(k + ".slot")) {
                             p.setMetadata("aris_curr", new FixedMetadataValue(m, c.getString("currency", "MONEY")));
                             p.setMetadata("aris_cmd", new FixedMetadataValue(m, items.getString(k + ".command", "")));
-                            p.setMetadata("aris_file", new FixedMetadataValue(m, f.getName()));
+                            p.setMetadata("aris_file", new FixedMetadataValue(m, f.getName().replace(".yml", "")));
+                            p.setMetadata("aris_stack", new FixedMetadataValue(m, items.getInt(k + ".stack", 64)));
                             p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
-                            ConfirmPurchase.open(p, items.getDouble(k + ".price"), e.getCurrentItem(), 1);
+                            ConfirmPurchase.open(p, items.getDouble(k + ".price"), e.getCurrentItem(), 1, items.getInt(k + ".stack", 64));
                             return;
                         }
                     }
@@ -133,4 +136,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-                                                                                       }
+                }
