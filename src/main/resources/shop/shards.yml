@@ -1,0 +1,109 @@
+title: "ѕʜᴏᴘ - ꜱʜᴀʀᴅ"
+rows: 3
+currency: SHARDS
+items:
+  common_key:
+    slot: 2
+    material: TRIPWIRE_HOOK
+    displayname: "&#24981aᴄᴏᴍᴍᴏɴ ᴋᴇʏ"
+    price: 200
+    stack: 64
+    command: "dc givekey %player% Common %amount%"
+    amount: 1
+    lore:
+      - "&fBuy Price: &#a303f9%price%"
+  prime_key:
+    slot: 3
+    material: TRIPWIRE_HOOK
+    displayname: "&#2386d3ᴘʀɪᴍᴇ ᴋᴇʏ"
+    price: 1500
+    stack: 64
+    command: "dc givekey %player% Prime %amount%"
+    amount: 1
+    lore:
+      - "&fBuy Price: &#a303f9%price%"
+  gold_key:
+    slot: 4
+    material: TRIPWIRE_HOOK
+    displayname: "&#e3b900ɢᴏʟᴅ ᴋᴇʏ"
+    price: 1500
+    stack: 64
+    command: "dc givekey %player% Gold %amount%"
+    amount: 1
+    lore:
+      - "&fBuy Price: &#a303f9%price%"
+  amethyst_key:
+    slot: 5
+    material: TRIPWIRE_HOOK
+    displayname: "&#9966CCᴀᴍᴇᴛʜʏꜱᴛ ᴋᴇʏ"
+    price: 4000
+    stack: 64
+    command: "dc givekey %player% Amethyst %amount%"
+    amount: 1
+    lore:
+      - "&fBuy Price: &#a303f9%price%"
+  crimson_key:
+    slot: 6
+    material: TRIPWIRE_HOOK
+    displayname: "&#c42119ᴄʀɪᴍꜱᴏɴ ᴋᴇʏ"
+    price: 2000
+    stack: 64
+    command: "dc givekey %player% Crimson %amount%"
+    amount: 1
+    lore:
+      - "&fBuy Price: &#a303f9%price%"
+  spawner_spider:
+    slot: 12
+    material: SPAWNER
+    displayname: "&dSpawner"
+    price: 500
+    stack: 64
+    command: "ds give %player% spider %amount%"
+    amount: 1
+    lore:
+      - "&eSpider"
+      - "&fBuy Price: &#a303f9%price%"
+  spawner_skeleton:
+    slot: 13
+    material: SPAWNER
+    displayname: "&dSpawner"
+    price: 500
+    stack: 64
+    command: "ds give %player% skeleton %amount%"
+    amount: 1
+    lore:
+      - "&eSkeleton"
+      - "&fBuy Price: &#a303f9%price%"
+  spawner_creeper:
+    slot: 14
+    material: SPAWNER
+    displayname: "&dSpawner"
+    price: 625
+    stack: 64
+    command: "ds give %player% creeper %amount%"
+    amount: 1
+    lore:
+      - "&eCreeper"
+      - "&fBuy Price: &#a303f9%price%"
+  spawner_zombified_piglin:
+    slot: 15
+    material: SPAWNER
+    displayname: "&dSpawner"
+    price: 750
+    stack: 64
+    command: "ds give %player% zombie_piglin %amount%"
+    amount: 1
+    lore:
+      - "&eZombified Piglin"
+      - "&fBuy Price: &#a303f9%price%"
+  spawner_blaze:
+    slot: 16
+    material: SPAWNER
+    displayname: "&dSpawner"
+    price: 1000
+    stack: 64
+    command: "ds give %player% blaze %amount%"
+    amount: 1
+    lore:
+      - "&eBlaze"
+      - "&fBuy Price: &#a303f9%price%"

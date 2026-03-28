@@ -1,0 +1,48 @@
+title: "&8sʜᴏᴘ - ɴᴇᴛʜᴇʀ"
+rows: 3
+items:
+  blaze-rod:
+    slot: 9
+    material: BLAZE_ROD
+    displayname: "&fBlaze Rod"
+    price: 150
+    stack: 64
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  glowstone-dust:
+    slot: 10
+    material: GLOWSTONE_DUST
+    displayname: "&fGlowstone Dust"
+    price: 15
+    stack: 64
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  magma-cream:
+    slot: 11
+    material: MAGMA_CREAM
+    displayname: "&fMagma Cream"
+    price: 15
+    stack: 64
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  ghast-tear:
+    slot: 12
+    material: GHAST_TEAR
+    displayname: "&fGhast Tear"
+    price: 350
+    stack: 64
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
+  nether-quartz:
+    slot: 13
+    material: QUARTZ
+    displayname: "&fNether Quartz"
+    price: 15
+    stack: 64
+    amount: 1
+    lore:
+      - "&fBuy Price: &#0bf52b%price%"
