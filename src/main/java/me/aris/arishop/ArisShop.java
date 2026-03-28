@@ -1,6 +1,7 @@
 package me.aris.arishop;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,10 +17,17 @@ import java.util.regex.Pattern;
 public class ArisShop extends JavaPlugin {
     private static ArisShop instance;
     private static Economy econ = null;
+    private boolean isFolia;
 
     @Override
     public void onEnable() {
         instance = this;
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            isFolia = true;
+        } catch (ClassNotFoundException e) {
+            isFolia = false;
+        }
         saveDefaultConfig();
         File shopFolder = new File(getDataFolder(), "shop");
         if (!shopFolder.exists()) {
@@ -70,9 +78,14 @@ public class ArisShop extends JavaPlugin {
         if (sec.getBoolean("actionbar")) p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(finalMsg));
     }
 
+    public void runTask(Player p, Runnable r) {
+        if (isFolia) p.getScheduler().run(this, task -> r.run(), null);
+        else Bukkit.getScheduler().runTask(this, r);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-                                                                }
+            }
