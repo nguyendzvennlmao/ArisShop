@@ -1,10 +1,15 @@
 name: ArisShop
-version: 1.0
+version: 1.1
 main: me.aris.arishop.ArisShop
 api-version: 1.20
-depend: [Vault]
-softdepend: [PlaceholderAPI]
+author: VennLMAO
+description: He thong cua hang nang cao cho Aris Network
+folia-supported: true
 commands:
   shop:
-    description: Open the ArisShop menu
-    alias: [cuahang]
+    description: Mo menu cua hang chinh
+    aliases: [arishop, cuahang]
+permissions:
+  arishop.use:
+    description: Cho phep nguoi dung mo shop
+    default: true
