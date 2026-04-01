@@ -50,14 +50,14 @@ public class ShopListener implements Listener {
 
                 boolean can = false;
                 if (finalCurr.equalsIgnoreCase("SHARDS")) {
-                    int bal = 0;
+                    double bal = 0;
                     try {
                         String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, m.getConfig().getString("currencies.shards.balance-placeholder"));
-                        bal = Integer.parseInt(raw.replaceAll("[^0-9]", ""));
+                        bal = Double.parseDouble(raw.replaceAll("[^0-9.]", ""));
                     } catch (Exception ex) { bal = 0; }
                     
                     if (bal >= finalTotal) {
-                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((int)finalTotal))));
+                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((long)finalTotal))));
                         can = true;
                     } else {
                         m.sendMsg(p, "insufficient-shards");
@@ -134,4 +134,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-    }
+            }
