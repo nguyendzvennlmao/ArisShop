@@ -49,4 +49,4 @@ public class ConfirmPurchase {
         inv.setItem(gui.getInt("item-preview.slot"), preview);
         p.openInventory(inv);
     }
-            }
+    }
