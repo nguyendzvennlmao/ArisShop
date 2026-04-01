@@ -75,7 +75,7 @@ public class ArisShop extends JavaPlugin {
     }
 
     public String format(double n) {
-        if (n < 1000) return String.valueOf((int)n);
+        if (n < 1000) return String.valueOf((long)n);
         ConfigurationSection f = getConfig().getConfigurationSection("amount-format");
         String[] units = {"", f.getString("k"), f.getString("m"), f.getString("b"), f.getString("t")};
         int exp = (int) (Math.log10(n) / 3);
@@ -103,4 +103,4 @@ public class ArisShop extends JavaPlugin {
         if (sender instanceof Player p) ShopMain.open(p);
         return true;
     }
-                }
+    }
