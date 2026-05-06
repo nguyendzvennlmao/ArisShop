@@ -2,6 +2,7 @@ package me.aris.arishop;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -129,50 +130,105 @@ public class ConfirmPurchase implements Listener {
         int currentAmount = p.getMetadata("aris_amount").get(0).asInt();
         ItemStack shopItem = (ItemStack) p.getMetadata("aris_item").get(0).value();
         int maxStack = p.getMetadata("aris_stack").get(0).asInt();
+        String curr = p.hasMetadata("aris_curr") ? p.getMetadata("aris_curr").get(0).asString() : "MONEY";
+        String file = p.hasMetadata("aris_file") ? p.getMetadata("aris_file").get(0).asString() : "";
         
         String displayName = clicked.getItemMeta() != null ? clicked.getItemMeta().getDisplayName() : "";
         
         if (displayName.contains(plugin.color(gui.getString("confirm.name")))) {
-            return;
+            double totalPrice = price * currentAmount;
+            
+            boolean can = false;
+            if (curr.equalsIgnoreCase("SHARDS")) {
+                double bal = 0;
+                try {
+                    String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, plugin.getConfig().getString("currencies.shards.balance-placeholder"));
+                    bal = Double.parseDouble(raw.replaceAll("[^0-9.]", ""));
+                } catch (Exception ex) { bal = 0; }
+                
+                if (bal >= totalPrice) {
+                    plugin.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
+                        plugin.getConfig().getString("currencies.shards.take-command")
+                            .replace("%player%", p.getName())
+                            .replace("%price%", String.valueOf((long)totalPrice))));
+                    can = true;
+                } else {
+                    plugin.sendMsg(p, "insufficient-shards");
+                    p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.purchase-fail")), 1, 1);
+                }
+            } else {
+                if (ArisShop.getEconomy().has(p, totalPrice)) {
+                    ArisShop.getEconomy().withdrawPlayer(p, totalPrice);
+                    can = true;
+                } else {
+                    plugin.sendMsg(p, "insufficient-funds");
+                    p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.purchase-fail")), 1, 1);
+                }
+            }
+            
+            if (can) {
+                if (p.getInventory().firstEmpty() == -1) {
+                    plugin.sendMsg(p, "full-inventory");
+                    p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.purchase-fail")), 1, 1);
+                    return;
+                }
+                ItemStack toGive = shopItem.clone();
+                toGive.setAmount(currentAmount);
+                p.getInventory().addItem(toGive);
+                String itemName = shopItem.getItemMeta() != null ? shopItem.getItemMeta().getDisplayName() : shopItem.getType().toString();
+                plugin.sendMsg(p, "buy-success", "%amount%", String.valueOf(currentAmount), "%item%", itemName);
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.purchase-success")), 1, 1);
+                p.closeInventory();
+            }
         }
         else if (displayName.contains(plugin.color(gui.getString("cancel.name")))) {
+            p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.cancel-click")), 1, 1);
             p.closeInventory();
+            if (!file.isEmpty()) {
+                ShopItem.open(p, file);
+            }
         }
         else if (displayName.contains(plugin.color(gui.getString("add1.name")))) {
             int newAmount = Math.min(currentAmount + 1, maxStack);
             if (newAmount != currentAmount) {
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.button-click")), 1, 1);
                 open(p, price, shopItem, newAmount, maxStack);
             }
         }
         else if (displayName.contains(plugin.color(gui.getString("add10.name")))) {
             int newAmount = Math.min(currentAmount + 10, maxStack);
             if (newAmount != currentAmount) {
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.button-click")), 1, 1);
                 open(p, price, shopItem, newAmount, maxStack);
             }
         }
         else if (displayName.contains(plugin.color(gui.getString("add64.name")))) {
             int newAmount = Math.min(currentAmount + 64, maxStack);
             if (newAmount != currentAmount) {
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.button-click")), 1, 1);
                 open(p, price, shopItem, newAmount, maxStack);
             }
         }
         else if (displayName.contains(plugin.color(gui.getString("remove1.name")))) {
             int newAmount = Math.max(currentAmount - 1, 1);
             if (newAmount != currentAmount) {
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.button-click")), 1, 1);
                 open(p, price, shopItem, newAmount, maxStack);
             }
         }
         else if (displayName.contains(plugin.color(gui.getString("remove10.name")))) {
             int newAmount = Math.max(currentAmount - 10, 1);
             if (newAmount != currentAmount) {
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.button-click")), 1, 1);
                 open(p, price, shopItem, newAmount, maxStack);
             }
         }
         else if (displayName.contains(plugin.color(gui.getString("remove64.name")))) {
             int newAmount = 1;
             if (newAmount != currentAmount) {
+                p.playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("sounds.button-click")), 1, 1);
                 open(p, price, shopItem, newAmount, maxStack);
             }
         }
     }
-}
+                                               }
