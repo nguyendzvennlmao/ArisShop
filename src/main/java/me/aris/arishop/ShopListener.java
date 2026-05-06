@@ -1,6 +1,5 @@
 package me.aris.arishop;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import java.io.File;
 
@@ -31,6 +29,7 @@ public class ShopListener implements Listener {
                     return;
                 }
             }
+            return;
         }
 
         File folder = new File(m.getDataFolder(), "shop");
@@ -60,4 +59,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-                                }
+}
