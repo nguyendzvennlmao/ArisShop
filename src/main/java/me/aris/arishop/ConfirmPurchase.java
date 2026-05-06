@@ -16,14 +16,14 @@ import java.util.List;
 
 public class ConfirmPurchase implements Listener {
     
-    private ArisShop plugin;
+    private static ArisShop plugin;
     
     public ConfirmPurchase(ArisShop plugin) {
-        this.plugin = plugin;
+        ConfirmPurchase.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
     
-    public void open(Player p, double price, ItemStack shopItem, int amount, int maxStack) {
+    public static void open(Player p, double price, ItemStack shopItem, int amount, int maxStack) {
         ConfigurationSection gui = plugin.getConfig().getConfigurationSection("gui.quantity-selector");
         Inventory inv = Bukkit.createInventory(null, gui.getInt("rows", 3) * 9, plugin.color(gui.getString("title")));
         
@@ -67,7 +67,7 @@ public class ConfirmPurchase implements Listener {
             if (amount > 10) {
                 addButton(inv, gui, "remove10");
             }
-            if (amount == 64) {
+            if (amount >= 64) {
                 addButton(inv, gui, "remove64");
             }
         }
@@ -92,7 +92,7 @@ public class ConfirmPurchase implements Listener {
         p.openInventory(inv);
     }
     
-    private void addButton(Inventory inv, ConfigurationSection gui, String buttonPath) {
+    private static void addButton(Inventory inv, ConfigurationSection gui, String buttonPath) {
         ConfigurationSection sec = gui.getConfigurationSection(buttonPath);
         if (sec != null) {
             try {
@@ -133,18 +133,7 @@ public class ConfirmPurchase implements Listener {
         String displayName = clicked.getItemMeta() != null ? clicked.getItemMeta().getDisplayName() : "";
         
         if (displayName.contains(plugin.color(gui.getString("confirm.name")))) {
-            double totalPrice = price * currentAmount;
-            if (ArisShop.getEconomy().has(p, totalPrice)) {
-                ArisShop.getEconomy().withdrawPlayer(p, totalPrice);
-                ItemStack toGive = shopItem.clone();
-                toGive.setAmount(currentAmount);
-                p.getInventory().addItem(toGive);
-                p.closeInventory();
-                plugin.sendMsg(p, "buy-success", "%amount%", String.valueOf(currentAmount), "%item%", shopItem.getType().toString());
-            } else {
-                plugin.sendMsg(p, "insufficient-funds");
-                p.closeInventory();
-            }
+            return;
         }
         else if (displayName.contains(plugin.color(gui.getString("cancel.name")))) {
             p.closeInventory();
@@ -174,8 +163,7 @@ public class ConfirmPurchase implements Listener {
             }
         }
         else if (displayName.contains(plugin.color(gui.getString("remove10.name")))) {
-            int newAmount = Math.max(currentAmount - 10, 17);
-            if (newAmount < 1) newAmount = 1;
+            int newAmount = Math.max(currentAmount - 10, 1);
             if (newAmount != currentAmount) {
                 open(p, price, shopItem, newAmount, maxStack);
             }
@@ -187,4 +175,4 @@ public class ConfirmPurchase implements Listener {
             }
         }
     }
-                         }
+}
