@@ -36,23 +36,7 @@ public class ConfirmPurchase implements Listener {
         addButton(inv, gui, "confirm");
         addButton(inv, gui, "cancel");
         
-        if (maxStack == 1) {
-        }
-        else if (maxStack == 16) {
-            if (amount < 16) {
-                addButton(inv, gui, "add1");
-                if (amount + 10 <= 16) {
-                    addButton(inv, gui, "add10");
-                }
-            }
-            if (amount > 1) {
-                addButton(inv, gui, "remove1");
-            }
-            if (amount > 10) {
-                addButton(inv, gui, "remove10");
-            }
-        }
-        else if (maxStack == 64) {
+        if (maxStack == 64) {
             if (amount < 64) {
                 addButton(inv, gui, "add1");
                 if (amount + 10 <= 64) {
@@ -71,6 +55,20 @@ public class ConfirmPurchase implements Listener {
             if (amount >= 64) {
                 addButton(inv, gui, "remove64");
             }
+        } else if (maxStack == 16) {
+            if (amount < 16) {
+                addButton(inv, gui, "add1");
+                if (amount + 10 <= 16) {
+                    addButton(inv, gui, "add10");
+                }
+            }
+            if (amount > 1) {
+                addButton(inv, gui, "remove1");
+            }
+            if (amount > 10) {
+                addButton(inv, gui, "remove10");
+            }
+        } else if (maxStack == 1) {
         }
         
         ItemStack preview = shopItem.clone();
@@ -231,4 +229,4 @@ public class ConfirmPurchase implements Listener {
             }
         }
     }
-                                               }
+        }
