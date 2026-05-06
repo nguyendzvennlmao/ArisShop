@@ -33,74 +33,6 @@ public class ShopListener implements Listener {
             }
         }
 
-        ConfigurationSection gui = m.getConfig().getConfigurationSection("gui.quantity-selector");
-        if (title.equals(m.color(gui.getString("title")))) {
-            e.setCancelled(true);
-            
-            if (!p.hasMetadata("aris_price") || !p.hasMetadata("aris_amount") || 
-                !p.hasMetadata("aris_item") || !p.hasMetadata("aris_stack")) return;
-            
-            double price = p.getMetadata("aris_price").get(0).asDouble();
-            int amount = p.getMetadata("aris_amount").get(0).asInt();
-            int maxStack = p.getMetadata("aris_stack").get(0).asInt();
-            ItemStack itemObj = (ItemStack) p.getMetadata("aris_item").get(0).value();
-            String curr = p.hasMetadata("aris_curr") ? p.getMetadata("aris_curr").get(0).asString() : "MONEY";
-            String file = p.hasMetadata("aris_file") ? p.getMetadata("aris_file").get(0).asString() : "";
-
-            if (e.getSlot() == gui.getInt("confirm.slot")) {
-                double totalPrice = price * amount;
-                
-                boolean can = false;
-                if (curr.equalsIgnoreCase("SHARDS")) {
-                    double bal = 0;
-                    try {
-                        String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, m.getConfig().getString("currencies.shards.balance-placeholder"));
-                        bal = Double.parseDouble(raw.replaceAll("[^0-9.]", ""));
-                    } catch (Exception ex) { bal = 0; }
-                    
-                    if (bal >= totalPrice) {
-                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
-                            m.getConfig().getString("currencies.shards.take-command")
-                                .replace("%player%", p.getName())
-                                .replace("%price%", String.valueOf((long)totalPrice))));
-                        can = true;
-                    } else {
-                        m.sendMsg(p, "insufficient-shards");
-                        p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
-                    }
-                } else {
-                    if (ArisShop.getEconomy().getBalance(p) >= totalPrice) {
-                        ArisShop.getEconomy().withdrawPlayer(p, totalPrice);
-                        can = true;
-                    } else {
-                        m.sendMsg(p, "insufficient-funds");
-                        p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
-                    }
-                }
-
-                if (can) {
-                    if (p.getInventory().firstEmpty() == -1) {
-                        m.sendMsg(p, "full-inventory");
-                        p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
-                        return;
-                    }
-                    ItemStack finalI = itemObj.clone();
-                    finalI.setAmount(amount);
-                    p.getInventory().addItem(finalI);
-                    String itemName = itemObj.getItemMeta() != null ? itemObj.getItemMeta().getDisplayName() : itemObj.getType().toString();
-                    m.sendMsg(p, "buy-success", "%amount%", String.valueOf(amount), "%item%", itemName);
-                    p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-success")), 1, 1);
-                    p.closeInventory();
-                }
-            } 
-            else if (e.getSlot() == gui.getInt("cancel.slot")) {
-                p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.cancel-click")), 1, 1);
-                p.closeInventory();
-                ShopItem.open(p, file);
-            }
-            return;
-        }
-
         File folder = new File(m.getDataFolder(), "shop");
         if (folder.exists() && folder.listFiles() != null) {
             for (File f : folder.listFiles()) {
@@ -128,4 +60,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-                        }
+                                }
