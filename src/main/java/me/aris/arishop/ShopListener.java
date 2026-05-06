@@ -13,6 +13,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.io.File;
 
 public class ShopListener implements Listener {
+    
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (e.getClickedInventory() == null || e.getCurrentItem() == null) return;
@@ -35,6 +36,10 @@ public class ShopListener implements Listener {
         ConfigurationSection gui = m.getConfig().getConfigurationSection("gui.quantity-selector");
         if (title.equals(m.color(gui.getString("title")))) {
             e.setCancelled(true);
+            
+            if (!p.hasMetadata("aris_price") || !p.hasMetadata("aris_amount") || 
+                !p.hasMetadata("aris_item") || !p.hasMetadata("aris_stack")) return;
+            
             double price = p.getMetadata("aris_price").get(0).asDouble();
             int amount = p.getMetadata("aris_amount").get(0).asInt();
             int maxStack = p.getMetadata("aris_stack").get(0).asInt();
@@ -43,29 +48,29 @@ public class ShopListener implements Listener {
             String file = p.hasMetadata("aris_file") ? p.getMetadata("aris_file").get(0).asString() : "";
 
             if (e.getSlot() == gui.getInt("confirm.slot")) {
-                final double finalTotal = price * amount;
-                final int finalAmount = amount;
-                final ItemStack finalItemObj = itemObj;
-                final String finalCurr = curr;
-
+                double totalPrice = price * amount;
+                
                 boolean can = false;
-                if (finalCurr.equalsIgnoreCase("SHARDS")) {
+                if (curr.equalsIgnoreCase("SHARDS")) {
                     double bal = 0;
                     try {
                         String raw = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p, m.getConfig().getString("currencies.shards.balance-placeholder"));
                         bal = Double.parseDouble(raw.replaceAll("[^0-9.]", ""));
                     } catch (Exception ex) { bal = 0; }
                     
-                    if (bal >= finalTotal) {
-                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), m.getConfig().getString("currencies.shards.take-command").replace("%player%", p.getName()).replace("%price%", String.valueOf((long)finalTotal))));
+                    if (bal >= totalPrice) {
+                        m.runTask(p, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), 
+                            m.getConfig().getString("currencies.shards.take-command")
+                                .replace("%player%", p.getName())
+                                .replace("%price%", String.valueOf((long)totalPrice))));
                         can = true;
                     } else {
                         m.sendMsg(p, "insufficient-shards");
                         p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
                     }
                 } else {
-                    if (ArisShop.getEconomy().getBalance(p) >= finalTotal) {
-                        ArisShop.getEconomy().withdrawPlayer(p, finalTotal);
+                    if (ArisShop.getEconomy().getBalance(p) >= totalPrice) {
+                        ArisShop.getEconomy().withdrawPlayer(p, totalPrice);
                         can = true;
                     } else {
                         m.sendMsg(p, "insufficient-funds");
@@ -79,29 +84,19 @@ public class ShopListener implements Listener {
                         p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-fail")), 1, 1);
                         return;
                     }
-                    ItemStack finalI = finalItemObj.clone();
-                    finalI.setAmount(finalAmount);
+                    ItemStack finalI = itemObj.clone();
+                    finalI.setAmount(amount);
                     p.getInventory().addItem(finalI);
-                    m.sendMsg(p, "buy-success", "%amount%", String.valueOf(finalAmount), "%item%", finalItemObj.getItemMeta().getDisplayName());
+                    String itemName = itemObj.getItemMeta() != null ? itemObj.getItemMeta().getDisplayName() : itemObj.getType().toString();
+                    m.sendMsg(p, "buy-success", "%amount%", String.valueOf(amount), "%item%", itemName);
                     p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.purchase-success")), 1, 1);
+                    p.closeInventory();
                 }
-            } else if (e.getSlot() == gui.getInt("cancel.slot")) {
+            } 
+            else if (e.getSlot() == gui.getInt("cancel.slot")) {
                 p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.cancel-click")), 1, 1);
+                p.closeInventory();
                 ShopItem.open(p, file);
-            } else {
-                int add = 0;
-                if (e.getSlot() == gui.getInt("add1.slot")) add = 1;
-                else if (e.getSlot() == gui.getInt("add10.slot")) add = 10;
-                else if (e.getSlot() == gui.getInt("set64.slot")) { amount = maxStack; add = 0; }
-                else if (e.getSlot() == gui.getInt("remove1.slot")) add = -1;
-                else if (e.getSlot() == gui.getInt("remove10.slot")) add = -10;
-                else if (e.getSlot() == gui.getInt("remove64.slot")) { amount = 1; add = 0; }
-                
-                int newA = Math.min(maxStack, Math.max(1, amount + add));
-                if (newA != amount || e.getSlot() == gui.getInt("set64.slot") || e.getSlot() == gui.getInt("remove64.slot")) {
-                    p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
-                    ConfirmPurchase.open(p, price, itemObj, newA, maxStack);
-                }
             }
             return;
         }
@@ -124,7 +119,6 @@ public class ShopListener implements Listener {
                         if (e.getSlot() == items.getInt(k + ".slot")) {
                             p.setMetadata("aris_curr", new FixedMetadataValue(m, c.getString("currency", "MONEY")));
                             p.setMetadata("aris_file", new FixedMetadataValue(m, f.getName().replace(".yml", "")));
-                            p.setMetadata("aris_stack", new FixedMetadataValue(m, items.getInt(k + ".stack", 64)));
                             p.playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("sounds.button-click")), 1, 1);
                             ConfirmPurchase.open(p, items.getDouble(k + ".price"), e.getCurrentItem(), 1, items.getInt(k + ".stack", 64));
                             return;
@@ -134,4 +128,4 @@ public class ShopListener implements Listener {
             }
         }
     }
-            }
+                        }
